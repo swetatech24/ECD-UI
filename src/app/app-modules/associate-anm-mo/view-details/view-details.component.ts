@@ -1,0 +1,178 @@
+/* 
+* AMRIT – Accessible Medical Records via Integrated Technology 
+* Integrated EHR (Electronic Health Records) Solution 
+*
+* Copyright (C) "Piramal Swasthya Management and Research Institute" 
+*
+* This file is part of AMRIT.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see https://www.gnu.org/licenses/.
+*/
+
+
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { Inject } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
+
+@Component({
+  selector: 'app-view-details',
+  templateUrl: './view-details.component.html',
+  styleUrls: ['./view-details.component.css']
+})
+export class ViewDetailsComponent implements OnInit {
+  datePipeString : any='2023-02-13T00:00:00.000Z';
+  viewDetails:any=this.data.selectedDetails;
+  viewOutboundWorklistForm = this.fb.group({
+        id: [''],
+        phoneNo:[''],
+        wPhoneNumber:[''],
+        motherId:[''],
+        lapseTime: [''],
+        callAttemptNo:[''],
+        callStatus: [''],
+        recordUploadDate:[''],
+        ecdCallType:[''],
+        motherName:[''],
+        husbandName:[''],
+        Address:[''],
+        healthBlock:[''],
+        phcName:[''],
+        subFacility:[''],
+        Aasha:[''],
+        anmName:[''],
+        lmpDate:[''],
+        edd:[''],
+        nextAnc : [''],
+  })
+  viewOutboundWorklistFormForChild = this.fb.group({
+    id: [''],
+    phoneNo:[''],
+    wPhoneNumber:[''],
+    childId:[''],
+    lapseTime: [''],
+    callAttemptNo:[''],
+    callStatus: [''],
+    recordUploadDate:[''],
+    ecdCallType:[''],
+    childName:[''],
+    Address:[''],
+    healthBlock:[''],
+    phcName:[''],
+    subFacility:[''],
+    Aasha:[''],
+    anmName:[''],
+    nextPnc : [''],
+})
+  constructor(
+     @Inject(MAT_DIALOG_DATA) public data: any,
+     public dialogRef: MatDialogRef<ViewDetailsComponent>,
+     private fb: FormBuilder,
+     private datePipe: DatePipe
+  ) { 
+    this.datePipeString = this.datePipe.transform(this.datePipeString,'dd/MM/yyyy');
+    console.log(this.datePipeString);
+  }
+
+  getmodifiedViewDetails(viewDetails:any){
+    var modifiedObjForMother={
+      recordUploadDate:this.datePipe.transform(viewDetails.recordUploadDate,'dd/MM/yyyy'),
+      motherId:viewDetails.mctsidNo,
+      motherName:viewDetails.name,
+      husbandName:viewDetails.husbandName,
+      healthBlock:viewDetails.healthBlock,
+      phcName:viewDetails.phcName,
+      Address:viewDetails.address,
+      subFacility:viewDetails.subFacility,
+      phoneNo:viewDetails.whomPhoneNo,
+      Aasha:viewDetails.ashaName,
+      anmName:viewDetails.anmName,
+      lmpDate:this.datePipe.transform(viewDetails.lmpDate,'dd/MM/yyyy'),
+      edd:this.datePipe.transform(viewDetails.edd,'dd/MM/yyyy'),
+      nextAnc:this.datePipe.transform(viewDetails.nextAnc,'dd/MM/yyyy'),
+
+    }
+    var modifiedObjForChild={
+      recordUploadDate:this.datePipe.transform(viewDetails.recordUploadDate,'dd/MM/yyyy'),
+      childId:viewDetails.mctsidNoChildId,
+      childName:viewDetails.childName,
+      healthBlock:viewDetails.healthBlock,
+      phcName:viewDetails.phcName,
+      Address:viewDetails.address,
+      subFacility:viewDetails.subFacility,
+      phoneNo:viewDetails.phoneNo,
+      Aasha:viewDetails.ashaName,
+      anmName:viewDetails.anmName,
+      nextPnc:this.datePipe.transform(viewDetails.nextPnc,'dd/MM/yyyy'),
+    }
+
+    if(this.data.activeMother){
+      return modifiedObjForMother
+    }
+    else{
+      return modifiedObjForChild
+    }
+
+  }
+
+  patchValueForviewDetails(viewDetails:any){
+    let viewObj=this.getmodifiedViewDetails(viewDetails);
+    if(this.data.activeMother){
+      this.viewOutboundWorklistForm.patchValue(viewObj);
+    }
+    else{
+      this.viewOutboundWorklistFormForChild.patchValue(viewObj);
+    }
+    
+    }
+
+
+  //   onNoClick(): void {
+  //   this.dialogRef.close(false);
+  // }
+  
+
+  ngOnInit(): void {
+     this.patchValueForviewDetails(this.viewDetails); 
+  }
+
+}
+
+export interface sampleMapping {
+        id: number
+        phoneNo:number
+        wPhoneNumber:number
+        motherId:number
+        lapseTime: number
+        callAttemptNo:number
+        callStatus: string
+        recordUploadDate:string
+        ecdCallType:string
+        motherName:string
+        husbandName:string
+        Address:string
+        healthBlock:string
+        phcName:string
+        subFacility:string
+        Aasha:string
+        anmName:string
+        lmpDate:string
+        edd:string
+        nextAnc : string
+}

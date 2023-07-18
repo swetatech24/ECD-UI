@@ -1,0 +1,15 @@
+<iframe
+  [src]="ctiHandlerURL"
+  width="230px"
+  height="380px"
+  class="czenrix-bar"
+  title="czentrixBar"
+  [hidden]="barMinimized"
+  (click)="toggleBar()"
+></iframe>
+
+<button id="check" (click)="toggleBar()" class="iframeButton" mat-fab aria-label="call">
+    <mat-icon>call</mat-icon>
+  </button>
+    
+  
