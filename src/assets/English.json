@@ -431,7 +431,7 @@
   "callDetailReport":"Call Detail Report",
   "callSummaryReport":"Call Summary Report",
   "benificiaryReport":"Benificiary Wise Report",
-  "dateRangeDifference":"Enter date Range with 7 days Difference",
+  "dateRangeDifference":"Date range beyond 31 days difference is not allowed",
   "agentId":"Agent Id",
   "iVRFeedbackRequired": "IVR Feedback Required"
   
