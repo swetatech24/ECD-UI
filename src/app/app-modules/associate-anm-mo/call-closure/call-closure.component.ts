@@ -36,6 +36,7 @@ import { Router } from '@angular/router';
 import { MasterService } from '../../services/masterService/master.service';
 import { AgentsInnerpageComponent } from '../agents-innerpage/agents-innerpage.component';
 import { SpinnerService } from '../../services/spinnerService/spinner.service';
+import { Subscription, map, timer } from 'rxjs';
 
 @Component({
   selector: 'app-call-closure',
@@ -62,7 +63,11 @@ export class CallClosureComponent implements OnInit {
   nextAttemptTime:any;
   isCorrectDateAndTime:any=true;
   showStickyAgent:boolean =false;
-  disableIVRFeedback:boolean = true; 
+  disableIVRFeedback:boolean = true;
+  agentStatus: any = "FREE";
+  timerSubscription: Subscription = new Subscription;
+  callTimerSubscription: Subscription = new Subscription;
+  wrapupTimerSubscription: Subscription = new Subscription;
   callClosureForm: FormGroup = this.fb.group({
 
     isFurtherCallRequired: [],
@@ -131,6 +136,13 @@ private sms_service: SmsTemplateService,
 
     this.associateAnmMoService.openCompFlag$.subscribe((responseComp) => {
       if (responseComp !== null && responseComp === "Call Closed") {
+        if (this.timerSubscription != undefined) {
+          this.timerSubscription.unsubscribe();
+        }
+        this.unsubscribeWrapupTime();
+        if (this.callTimerSubscription != undefined) {
+          this.callTimerSubscription.unsubscribe();
+        }
         this.showDetails=false;
         this.showCallAnswerNoDropdown = false;
         this.disableIVRFeedback = true
@@ -141,6 +153,13 @@ private sms_service: SmsTemplateService,
       
   });
 
+  console.log("Calling Agent State API");
+  this.timerSubscription = timer(0, 15000).pipe( 
+    map(() => { 
+       console.log("Calling Agent State API");
+      this.getAgentState();  
+    }) 
+  ).subscribe(); 
 
 
     this.associateAnmMoService.callWrapupFlag$.subscribe((response) => {
@@ -150,6 +169,24 @@ private sms_service: SmsTemplateService,
     });
 
   }
+
+  ngOnDestroy() {
+    console.log("removing message listener");
+    if (this.timerSubscription != undefined) {
+      this.timerSubscription.unsubscribe();
+    }
+    this.unsubscribeWrapupTime();
+    if (this.callTimerSubscription != undefined) {
+      this.callTimerSubscription.unsubscribe();
+    }
+  }
+
+  unsubscribeWrapupTime() {
+    if (this.wrapupTimerSubscription) {
+      this.wrapupTimerSubscription.unsubscribe();
+    }
+  }
+
   getReasonsOfNotCallRequired() {
     this.masterService.getNoFurtherCallsReason().subscribe(
       (response: any) => {
@@ -301,7 +338,7 @@ private sms_service: SmsTemplateService,
        this.associateAnmMoService.callClosure(reqObj).subscribe(
         (response: any) => {
           if (response) {
-            
+            this.unsubscribeWrapupTime();
             sessionStorage.setItem("onCall", "false");
             this.associateAnmMoService.fromComponent = null;
             this.associateAnmMoService.setCallClosure();
@@ -318,6 +355,10 @@ private sms_service: SmsTemplateService,
               this.currentLanguageSet.callClosedSuccessfully,
               'success'
             );
+            console.log("Calling Agent State API");
+            console.log("Agent Status Observable");
+            this.getAgentState();
+            console.log("Agent Status Observable");
            
           } else {
             this.spinnerService.setLoading(false);
@@ -341,7 +382,21 @@ private sms_service: SmsTemplateService,
   //   this.confirmationService.openDialog('Call Closure Successfully', `success`);
   // }
 
+  getAgentState() {
+    let reqObj = {"agent_id" : this.loginService.agentId};
+    this.ctiService.getAgentState(reqObj).subscribe((response:any) => {
+        if (response && response.data && response.data.stateObj.stateName) {
+            console.log("Agent Status reset");
+            this.agentStatus = response.data.stateObj.stateName;
+            console.log("Agent Status Observable");
+            this.associateAnmMoService.setResetAgentStatus(this.agentStatus);
+            console.log("Agent Status reset start");
+        }
 
+    }, (err) => {
+       console.log("error");
+    });
+}
 
   resetSessions() {
     sessionStorage.removeItem("benPhoneNo");

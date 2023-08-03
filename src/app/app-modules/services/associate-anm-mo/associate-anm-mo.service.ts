@@ -73,6 +73,10 @@ export class AssociateAnmMoService {
   isBenRegistartionData = new BehaviorSubject(this.isBenRegistartion);
   isBenRegistartionData$ = this.isBenRegistartionData.asObservable();
 
+  resetAgentStatus: any="";
+  resetAgentStatusFlag = new BehaviorSubject(this.resetAgentStatus);
+  resetAgentStatusFlag$ = this.resetAgentStatusFlag.asObservable();
+
   constructor(private http: HttpClient,  private resolver: ComponentFactoryResolver) { }
 
 
@@ -223,4 +227,10 @@ getBeneficiaryCallHistory(reqObj:any){
 getCallHistoryDetails(reqObj:any){
   return this.http.get(environment.getCallHistoryDetailsUrl + '/' + reqObj);
 }
+
+setResetAgentStatus(value:any) {
+  this.resetAgentStatus = value;
+  this.resetAgentStatusFlag.next(this.resetAgentStatus);
+}
+
 }

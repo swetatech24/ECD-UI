@@ -141,6 +141,15 @@ export class AgentsInnerpageComponent implements OnInit {
       }) 
     ).subscribe(); 
 
+    console.log("Agent Status Observable");
+    this.associateAnmMoService.resetAgentStatusFlag$.subscribe((resetStatus) => {
+      console.log("Agent Status Observable");
+      if(resetStatus != undefined && resetStatus != null) {
+        console.log("Agent Status Observable");
+        this.agentStatus = resetStatus;
+        console.log("Agent Status resetting");
+      }
+    })
   
    
 
@@ -614,8 +623,6 @@ export class AgentsInnerpageComponent implements OnInit {
     this.ctiService.getAgentState(reqObj).subscribe((response:any) => {
         if (response && response.data && response.data.stateObj.stateName) {
             this.agentStatus = response.data.stateObj.stateName;
-            
-          
         }
 
     }, (err) => {
