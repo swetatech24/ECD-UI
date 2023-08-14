@@ -433,6 +433,13 @@
   "benificiaryReport":"Benificiary Wise Report",
   "dateRangeDifference":"Date range beyond 31 days difference is not allowed",
   "agentId":"Agent Id",
-  "iVRFeedbackRequired": "IVR Feedback Required"
+  "iVRFeedbackRequired": "IVR Feedback Required",
+  "questionnaireMapping":"Questionaire Mapping",
+  "createQuestionaireMapping":"Create Questionaire Mapping",
+  "parentQuestion":"Parent Question",
+  "childQuestion":"Child Question",
+  "answer":"Answer",
+  "editQuestionaireMapping":"Edit Questionaire Mapping",
+  "adQuestion":"Question Mapping"
   
 }
