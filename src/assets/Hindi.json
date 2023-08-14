@@ -437,5 +437,8 @@
   "childQuestion":"Child Question",
   "answer":"Answer",
   "editQuestionaireMapping":"Edit Questionaire Mapping",
-  "adQuestion":"Question Mapping"
+  "adQuestion":"Question Mapping",
+  "age": "Age",
+  "isWrongNumber" : "Is Wrong Number",
+  "pleaseValidateAge": "Please enter a valid age between 12 and 120 years"
 }

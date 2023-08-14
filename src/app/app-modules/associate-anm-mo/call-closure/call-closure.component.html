@@ -87,6 +87,15 @@
                                 <mat-radio-button class="m-10" value="No">{{currentLanguageSet?.no}}</mat-radio-button>
                             </mat-radio-group>
                         </div>
+                        <div style="padding: 8px;" class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box m-bottom">
+                            <label class="radio-button-styling" id="isWrongNumber">{{currentLanguageSet?.isWrongNumber}}
+                            </label>
+                            <mat-radio-group required id="isWrongNumber" formControlName="isWrongNumber"
+                                aria-label="isWrongNumber">
+                                <mat-radio-button class="m-10" value="Yes">{{currentLanguageSet?.yes}}</mat-radio-button>
+                                <mat-radio-button class="m-10" value="No">{{currentLanguageSet?.no}}</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
                         <div  style="padding: 8px;" *ngIf="selectedRole !='Associate' && showStickyAgent" class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box m-bottom">
                             <mat-checkbox labelPosition="before" formControlName="isStickyAgentRequired">{{currentLanguageSet?.stickyAgent}}</mat-checkbox>
                         </div>
