@@ -65,6 +65,8 @@ import * as moment from 'moment';
   villageMasterList: any;
   // genderMasterList:any;
   genderMasterList : any; 
+  ageLimit: number = 120;
+  valueEntered : any;
   // = [
   //   {
   //   "genderID" : 1,
@@ -227,6 +229,7 @@ else{
     lmpDate: new FormControl(),
     edd: new FormControl(),
     displayOBCallType: new FormControl(''),
+    age: new FormControl('')
   });
 
   // onClickOfPhoneNoType(event: any) {
@@ -490,6 +493,7 @@ else{
       "phoneNoOfWhom": this.benRegistrationForm.controls.phoneNoOf.value,
       "alternatePhoneNo":(this.benRegistrationForm.controls.alternatePhoneNo.value !== undefined && this.benRegistrationForm.controls.alternatePhoneNo.value !== null && this.benRegistrationForm.controls.alternatePhoneNo.value !== "") ? this.benRegistrationForm.controls.alternatePhoneNo.value : undefined,
       "dateOfBirth" : dobDateValue,
+      "age": this.benRegistrationForm.controls.age.value,
       "lmp" : lmpDateValue,
       "edd" : eddDateValue,
       "i_bendemographics" : demographicReq,
@@ -529,8 +533,10 @@ else{
         this.associateAnmMoService.selectedBenDetails.phcName = this.benRegistrationForm.controls.phcName.value,
         this.associateAnmMoService.selectedBenDetails.blockName = this.benRegistrationForm.controls.healthBlock.value,
         this.associateAnmMoService.selectedBenDetails.address = this.benRegistrationForm.controls.address.value,
+        this.associateAnmMoService.selectedBenDetails.dob =moment(this.benRegistrationForm.controls.dob.value).format('YYYY-MM-DDThh:mm:ssZ'),
         this.associateAnmMoService.selectedBenDetails.lmpDate =moment(this.benRegistrationForm.controls.lmpDate.value).format('YYYY-MM-DDThh:mm:ssZ'),
         this.associateAnmMoService.selectedBenDetails.edd =moment(this.benRegistrationForm.controls.edd.value).format('YYYY-MM-DDThh:mm:ssZ'),
+        this.associateAnmMoService.selectedBenDetails.age = this.benRegistrationForm.controls.age.value,
 
         this.confirmationService.openDialog(this.currentLanguageSet.beneficiaryRegisteredSuccessfully + " " + benId, `success`);
         this.associateAnmMoService.setOpenComp("ECD Questionnaire");
@@ -645,6 +651,7 @@ else{
     "phoneNoOfWhom": this.benRegistrationForm.controls.phoneNoOf.value,
     "alternatePhoneNo":(this.benRegistrationForm.controls.alternatePhoneNo.value !== undefined && this.benRegistrationForm.controls.alternatePhoneNo.value !== null && this.benRegistrationForm.controls.alternatePhoneNo.value !== "") ? this.benRegistrationForm.controls.alternatePhoneNo.value : undefined,
    "dateOfBirth" : dobDateValue,
+   "age": this.benRegistrationForm.controls.age.value,
    "lmp" : lmpDateValue,
    "edd" : eddDateValue,
    "i_bendemographics" : demographicReq,
@@ -690,6 +697,8 @@ console.log(reqObj);
         this.associateAnmMoService.selectedBenDetails.blockName = this.benRegistrationForm.controls.healthBlock.value,
         this.associateAnmMoService.selectedBenDetails.address = this.benRegistrationForm.controls.address.value,
         this.associateAnmMoService.selectedBenDetails.lmpDate =moment(this.benRegistrationForm.controls.lmpDate.value).format('YYYY-MM-DDThh:mm:ssZ'),
+        this.associateAnmMoService.selectedBenDetails.dob =moment(this.benRegistrationForm.controls.dob.value).format('YYYY-MM-DDThh:mm:ssZ'),
+        this.associateAnmMoService.selectedBenDetails.age = this.benRegistrationForm.controls.age.value,
         this.associateAnmMoService.selectedBenDetails.edd =moment(this.benRegistrationForm.controls.edd.value).format('YYYY-MM-DDThh:mm:ssZ'),
         this.confirmationService.openDialog(response.response, `success`);
      this.associateAnmMoService.setOpenComp("ECD Questionnaire");
@@ -741,7 +750,19 @@ console.log(reqObj);
     }
 
 
+    ageEntered() {
+    this.valueEntered = this.benRegistrationForm.controls.age.value;
+    if (this.valueEntered) {
+      if (
+        this.valueEntered > this.ageLimit
+        
+      ) {
+   this.confirmationService.openDialog( this.currentLanguageSet.pleaseValidateAge, 'warn');
+
+        this.benRegistrationForm.patchValue({ age: null });
+      } 
+    }
     
-    
+  }
   
 }
