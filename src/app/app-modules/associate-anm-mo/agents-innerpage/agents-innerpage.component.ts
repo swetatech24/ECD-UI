@@ -507,7 +507,8 @@ export class AgentsInnerpageComponent implements OnInit {
       deleted: false,
       createdBy: sessionStorage.getItem("userName"),
       modifiedBy: sessionStorage.getItem("userName"),
-      complaintId: null
+      complaintId: null,
+      isWrongNumber: false
     };
     let commonReqobj = {
       benCallID: this.associateAnmMoService.callDetailId,

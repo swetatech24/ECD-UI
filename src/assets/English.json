@@ -433,6 +433,9 @@
   "benificiaryReport":"Benificiary Wise Report",
   "dateRangeDifference":"Date range beyond 31 days difference is not allowed",
   "agentId":"Agent Id",
-  "iVRFeedbackRequired": "IVR Feedback Required"
+  "iVRFeedbackRequired": "IVR Feedback Required",
+  "age": "Age",
+  "isWrongNumber" : "Is Wrong Number",
+  "pleaseValidateAge": "Please enter a valid age between 12 and 120 years"
   
 }

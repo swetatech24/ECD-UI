@@ -109,6 +109,7 @@ export class EcdQuestionnaireComponent implements OnInit {
     anmPhoneNo:[''],
     lmpDate:[''],
     edd:[''],
+    age: ['']
   });
 
   beneficiaryChildDataForm = this.fb.group({
