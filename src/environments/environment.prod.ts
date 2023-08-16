@@ -25,8 +25,8 @@ const ecdIP = 'http://10.208.122.22:8080/';
 const commonIP = 'http://10.208.122.38:8080/';
 const adminIP = 'http://10.208.122.38:8080/';
 const IOT_API = 'http://localhost:8085/ezdx-hub-connect-srv';
-const COMMON_API = `${commonIP}commonapi-v1.0/`;
-const ADMIN_API = `${adminIP}adminapi-v1.0/`;
+const COMMON_API = `${commonIP}commonapi-v1.1/`;
+const ADMIN_API = `${adminIP}adminapi-v1.1/`;
 const ECD_API = `${ecdIP}ecdapi/`;
 
 export const environment = {
@@ -65,6 +65,10 @@ export const environment = {
   getDataUploadURL: `${ECD_API}uploadRCHData`,
   getUploadTemplateURL: `${ECD_API}dataTemplate/uploadTemplate`,
   getDownloadTemplateURL: `${ECD_API}dataTemplate/downloadTemplate`,
+  createParentChildMappingURL:`${ECD_API}Questionnaire/createQuestionnairesMap`,
+  getQuestionnairesForMappingURL:`${ECD_API}Questionnaire/getQuestionnaires`,
+  getMappedQuestionsURL:`${ECD_API}Questionnaire/getMappedParentChildQuestionnaire`,
+  updateParentChildMappingURL:`${ECD_API}Questionnaire/editQuestionnairesMap`,
 
 
   // supervisor - section configuration Urls
