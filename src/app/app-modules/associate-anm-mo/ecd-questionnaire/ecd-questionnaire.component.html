@@ -581,7 +581,7 @@
                   <div *ngIf="ques?.questionType?.toLowerCase() === 'label'">
                     <a class="textColor"> {{ques.question}} </a>
                   </div>
-                  <div *ngIf="ques?.questionType?.toLowerCase() === 'question'">
+                  <div *ngIf="ques?.questionType?.toLowerCase() === 'question' && ques?.enabledQues != false">
                     <li class="quesStyle"><strong> {{ques.question}} </strong>
 
                     <!-- Fields to check the question type starts here-->
@@ -602,8 +602,8 @@
                     </mat-form-field>
                     <mat-error class="error" *ngIf="ques?.answerType?.toLowerCase() === 'time' && validateAnswer && (ques.answer === null || ques.answer === '' || ques.answer === undefined)">Please enter mandatory field</mat-error>
 
-                    <mat-form-field appearance="outline" class="backgroundWhite fieldAlignment dropdownfontStyle" *ngIf="ques?.answerType?.toLowerCase() === 'multiple'">
-                      <mat-select matInput multiple placeholder="Please Enter Answer Here" required [(ngModel)]="ques.answer">
+                    <mat-form-field appearance="outline" class="backgroundWhite dropdownfontStyle" *ngIf="ques?.answerType?.toLowerCase() === 'multiple'">
+                      <mat-select matInput multiple placeholder="Please Enter Answer Here" required [(ngModel)]="ques.answer" (selectionChange)="processFilteredQuestionnaires(ques)">
                         <mat-option *ngFor="let option of ques.options" [value]="option.options">
                           {{ option.options }}
                         </mat-option>
@@ -617,9 +617,9 @@
                     <mat-error class="error" *ngIf="ques?.answerType?.toLowerCase() === 'date & time' && validateAnswer && (ques.answer === null || ques.answer === '' || ques.answer === undefined)">Please enter mandatory field</mat-error>
 
                     <!-- extra condition for the radio button not visible 2 tyms for hrp and hrni cases  -->
-                    <mat-radio-group *ngIf="ques?.answerType?.toLowerCase() === 'radio' && !ques?.question.toLowerCase().includes('is hrp')  && !ques?.question.toLowerCase().includes('high risk pregnancy') 
-                    && !ques?.question.toLowerCase().includes('is hrni') && !ques?.question.toLowerCase().includes('high risk newborn') && !ques?.question.toLowerCase().includes('high risk infant')"
-                    [(ngModel)]="ques.answer" required>
+
+                    <mat-radio-group *ngIf="ques?.answerType?.toLowerCase() === 'radio'"
+                    [(ngModel)]="ques.answer" (change)="processFilteredQuestionnaires(ques)" required>
                       <mat-radio-button style="margin-left: 5px; margin-right: 5px;" *ngFor="let option of ques.options" [value]="option.options">
                         {{option.options}}
                       </mat-radio-button>
@@ -627,21 +627,21 @@
                     </mat-radio-group>
 
                     <!-- extra condition for the downdrop not visible 2 tyms for hrp and hrni cases  -->
-                    <mat-form-field appearance="outline" class="backgroundWhite fieldForHRP dropdownfontStyle" *ngIf="ques?.answerType?.toLowerCase() === 'dropdown' && !ques?.question.toLowerCase().includes('is hrp')  && !ques?.question.toLowerCase().includes('high risk pregnancy') 
-                    && !ques?.question.toLowerCase().includes('is hrni') && !ques?.question.toLowerCase().includes('high risk newborn') && !ques?.question.toLowerCase().includes('high risk infant')">
-                      <mat-select matInput type="select" placeholder="Please Enter Answer Here" required [(ngModel)]="ques.answer">
+
+                    <mat-form-field appearance="outline" class="backgroundWhite fieldForHRP dropdownfontStyle" *ngIf="ques?.answerType?.toLowerCase() === 'dropdown'">
+                      <mat-select matInput type="select" placeholder="Please Enter Answer Here" required [(ngModel)]="ques.answer" (selectionChange)="processFilteredQuestionnaires(ques)">
                         <mat-option *ngFor="let option of ques.options" [value]="option.options">
                           {{ option.options }}
                         </mat-option>
                       </mat-select>
                     </mat-form-field>
-                    <mat-error class="error" *ngIf="ques?.answerType?.toLowerCase() === 'dropdown' && !ques?.question.toLowerCase().includes('is hrp')  && !ques?.question.toLowerCase().includes('high risk pregnancy') 
-                    && !ques?.question.toLowerCase().includes('is hrni') && !ques?.question.toLowerCase().includes('high risk newborn') && !ques?.question.toLowerCase().includes('high risk infant') && validateAnswer && (ques.answer === null || ques.answer === '' || ques.answer === undefined)">Please enter mandatory field</mat-error>
+                    <mat-error class="error" *ngIf="ques?.answerType?.toLowerCase() === 'dropdown' && validateAnswer && (ques.answer === null || ques.answer === '' || ques.answer === undefined)">Please enter mandatory field</mat-error>
 
                     <!-- Fields to check the question type ends here -->
 
                     <!-- conditions to check if Beneficiary is HRP -->
-                    <div *ngIf="(ques?.question.toLowerCase().includes('is hrp') || ques?.question.toLowerCase().includes('high risk pregnancy'))">
+
+                    <!-- <div *ngIf="(ques?.question.toLowerCase().includes('is hrp') || ques?.question.toLowerCase().includes('high risk pregnancy'))">
                     <mat-form-field appearance="outline" class="backgroundWhite fieldAlignment dropdownfontStyle" *ngIf="ques?.answerType?.toLowerCase() === 'dropdown'">
                       <mat-select matInput type="select" placeholder="Please Enter Answer Here" required [(ngModel)]="ques.answer" (selectionChange)="checkIsHrp(ques.answer)">
                         <mat-option *ngFor="let option of ques.options" [value]="option.options">
@@ -670,10 +670,11 @@
                       <input matInput type="input" placeholder="Other HRP Reason" required [(ngModel)]="otherHrPReason"/>
                     </mat-form-field>
 
-                    </div>
+                    </div> -->
 
                     <!-- conditions to check if Beneficiary is HRNI -->
-                    <div *ngIf="(ques?.question.toLowerCase().includes('is hrni')
+
+                    <!-- <div *ngIf="(ques?.question.toLowerCase().includes('is hrni')
                     || ques?.question.toLowerCase().includes('high risk newborn') || ques?.question.toLowerCase().includes('high risk infant'))">
                     
                     <mat-form-field appearance="outline" class="backgroundWhite fieldAlignment dropdownfontStyle" *ngIf="ques?.answerType?.toLowerCase() === 'dropdown'">
@@ -721,7 +722,7 @@
                     <input matInput type="input" placeholder="Probable Defect Cause" required [(ngModel)]="probableDefectCause"/>
                   </mat-form-field>
                   
-                    </div>
+                    </div> -->
                     </div>
                     </div>
                     </li>                    

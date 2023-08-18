@@ -162,9 +162,9 @@ export class EcdQuestionnaireComponent implements OnInit {
       this.getEcdQuestionaire();
       }
     });
-    this.getHrpMaster();
-    this.getHrniMaster();
-    this.getCongentialAnomaliesMaster();
+    // this.getHrpMaster();
+    // this.getHrniMaster();
+    // this.getCongentialAnomaliesMaster();
     this.associateAnmMoService.openCompFlag$.subscribe((responseComp) => {
       if (responseComp !== null && responseComp === "Call Closed") {
         this.filteredQuesData = [];
@@ -382,50 +382,50 @@ export class EcdQuestionnaireComponent implements OnInit {
     // this.associateAnmMoService.loadComponent(BeneficiaryCallHistoryComponent,null)
    }
 
-   getHrpMaster(){
-     this.masterService.getHrpReasons().subscribe((res: any) => {
-      if(res && res.length > 0){
-         this.hrpMasterData = res;
-       }else {
-         this.confirmationService.openDialog(res.errorMessage, 'error');
-       }
-     }, (err : any) => {
-      if(err && err.error)
-      this.confirmationService.openDialog(err.error, 'error');
-      else
-      this.confirmationService.openDialog(err.title + err.detail, 'error')
-      });
-   }
+  //  getHrpMaster(){
+  //    this.masterService.getHrpReasons().subscribe((res: any) => {
+  //     if(res && res.length > 0){
+  //        this.hrpMasterData = res;
+  //      }else {
+  //        this.confirmationService.openDialog(res.errorMessage, 'error');
+  //      }
+  //    }, (err : any) => {
+  //     if(err && err.error)
+  //     this.confirmationService.openDialog(err.error, 'error');
+  //     else
+  //     this.confirmationService.openDialog(err.title + err.detail, 'error')
+  //     });
+  //  }
 
-   getHrniMaster(){
-    this.masterService.getHniReasons().subscribe((res: any) => {
-     if(res && res.length > 0){
-        this.hrniMasterData = res;
-      }else {
-        this.confirmationService.openDialog(res.errorMessage, 'error');
-      }
-    }, (err : any) => {
-     if(err && err.error)
-     this.confirmationService.openDialog(err.error, 'error');
-     else
-     this.confirmationService.openDialog(err.title + err.detail, 'error')
-     });
-  }
+  //  getHrniMaster(){
+  //   this.masterService.getHniReasons().subscribe((res: any) => {
+  //    if(res && res.length > 0){
+  //       this.hrniMasterData = res;
+  //     }else {
+  //       this.confirmationService.openDialog(res.errorMessage, 'error');
+  //     }
+  //   }, (err : any) => {
+  //    if(err && err.error)
+  //    this.confirmationService.openDialog(err.error, 'error');
+  //    else
+  //    this.confirmationService.openDialog(err.title + err.detail, 'error')
+  //    });
+  // }
 
-  getCongentialAnomaliesMaster(){
-    this.masterService.getContentialAnomaliesReasons().subscribe((res: any) => {
-     if(res && res.length > 0){
-        this.congentialAnomaliesData = res;
-      }else {
-        this.confirmationService.openDialog(res.errorMessage, 'error');
-      }
-    }, (err : any) => {
-     if(err && err.error)
-     this.confirmationService.openDialog(err.error, 'error');
-     else
-     this.confirmationService.openDialog(err.title + err.detail, 'error')
-     });
-  }
+  // getCongentialAnomaliesMaster(){
+  //   this.masterService.getContentialAnomaliesReasons().subscribe((res: any) => {
+  //    if(res && res.length > 0){
+  //       this.congentialAnomaliesData = res;
+  //     }else {
+  //       this.confirmationService.openDialog(res.errorMessage, 'error');
+  //     }
+  //   }, (err : any) => {
+  //    if(err && err.error)
+  //    this.confirmationService.openDialog(err.error, 'error');
+  //    else
+  //    this.confirmationService.openDialog(err.title + err.detail, 'error')
+  //    });
+  // }
 
    getEcdQuestionaire(){
      let psmId = sessionStorage.getItem('providerServiceMapID');
@@ -451,32 +451,84 @@ export class EcdQuestionnaireComponent implements OnInit {
       this.associateAnmMoService.onClickOfEcdQuestionnaire(false);
   }
 
-  filterEcdQuestionnaire(res: any){
+  // filterEcdQuestionnaire(res: any){
+  //   this.filteredQuesData = res.reduce((acc: { sectionId: number; sectionName: string; sectionRank: number; questionnaires: any[] }[], curr: any) => {
+  //     const existingSection = acc.find(section => section.sectionRank === curr.callSectionRank);
+  
+  //     if (existingSection) {
+  //       existingSection.questionnaires.push(curr);
+  //     } else {
+  //       acc.push({
+  //         sectionId: curr.sectionid,
+  //         sectionName: curr.sectionName,
+  //         sectionRank: curr.callSectionRank,
+  //         questionnaires: [{...curr, answer: null}]
+  //       });
+  //     }
+  
+  //     return acc;
+  //     }, []).sort((a: { sectionRank: number; }, b: { sectionRank: number; }) => a.sectionRank - b.sectionRank)
+  //     .map((section: any) => ({
+  //       ...section,
+  //       questionnaires: section.questionnaires.sort((a: { sectionQuestionRank: number; }, b: { sectionQuestionRank: number; }) => a.sectionQuestionRank - b.sectionQuestionRank)
+  //     }));
+  //     console.log("filtered data", this.filteredQuesData);
+  //     // if(this.benData.outboundCallType.toLowerCase() === "introductory"){
+  //     //   this.filterHrpHrniQuesForIntroductoryCall();
+  //     // }
+  // }
+
+  filterEcdQuestionnaire(res: any) {
     this.filteredQuesData = res.reduce((acc: { sectionId: number; sectionName: string; sectionRank: number; questionnaires: any[] }[], curr: any) => {
-      const existingSection = acc.find(section => section.sectionRank === curr.callSectionRank);
-  
-      if (existingSection) {
-        existingSection.questionnaires.push(curr);
-      } else {
-        acc.push({
-          sectionId: curr.sectionid,
-          sectionName: curr.sectionName,
-          sectionRank: curr.callSectionRank,
-          questionnaires: [{...curr, answer: null}]
-        });
-      }
-  
-      return acc;
-      }, []).sort((a: { sectionRank: number; }, b: { sectionRank: number; }) => a.sectionRank - b.sectionRank)
+        const existingSection = acc.find(section => section.sectionRank === curr.callSectionRank);
+        if (existingSection) {
+            existingSection.questionnaires.push({...curr, answer: null, enabledQues: this.isQuestionEnabled(curr)});
+        } else {
+            acc.push({
+                sectionId: curr.sectionid,
+                sectionName: curr.sectionName,
+                sectionRank: curr.callSectionRank,
+                questionnaires: [{...curr, answer: null, enabledQues: this.isQuestionEnabled(curr)}]
+            });
+        }
+        return acc;
+    }, []).sort((a: { sectionRank: number; }, b: { sectionRank: number; }) => a.sectionRank - b.sectionRank)
       .map((section: any) => ({
         ...section,
         questionnaires: section.questionnaires.sort((a: { sectionQuestionRank: number; }, b: { sectionQuestionRank: number; }) => a.sectionQuestionRank - b.sectionQuestionRank)
-      }));
-      console.log("filtered data", this.filteredQuesData);
-      if(this.benData.outboundCallType.toLowerCase() === "introductory"){
-        this.filterHrpHrniQuesForIntroductoryCall();
-      }
+    }));
+    console.log("filtered data", this.filteredQuesData);
   }
+
+    isQuestionEnabled(question: any) {
+        if (question.parentQuestionId !== null && question.parentQuestionId != undefined && 
+            question.parentAnswer !== null && question.parentAnswer != undefined) {
+            return false;
+        }
+        return true;
+    }
+
+    processFilteredQuestionnaires(selectedAnsweredQues: any) {
+      console.log('Processing questionnaires:', selectedAnsweredQues);
+      this.filteredQuesData.forEach((section: any) => {
+        section.questionnaires.forEach((questionnaire: any) => {
+          if (selectedAnsweredQues.answerType != null && selectedAnsweredQues.answerType != undefined &&
+            (selectedAnsweredQues.answerType.toLowerCase() === "radio" || selectedAnsweredQues.answerType.toLowerCase() === "dropdown") &&
+            questionnaire.parentQuestionId === selectedAnsweredQues.questionid &&
+            questionnaire.parentAnswer === selectedAnsweredQues.answer
+          ) {
+            console.log('Matching questionnaire found:', questionnaire);
+            questionnaire.enabledQues = true;
+          } else if (selectedAnsweredQues.answerType != null && selectedAnsweredQues.answerType != undefined &&
+            selectedAnsweredQues.answerType.toLowerCase() === "multiple" && 
+            questionnaire.parentQuestionId === selectedAnsweredQues.questionid &&
+            selectedAnsweredQues.answer.includes(questionnaire.parentAnswer)
+          ) {
+            questionnaire.enabledQues = true;
+          }
+        });
+      });
+    }
 
     // Trigger change detection for data source to identify it 
     refresh(){
@@ -486,18 +538,18 @@ export class EcdQuestionnaireComponent implements OnInit {
     }
 
     // filter ques and splice object in the array
-    filterHrpHrniQuesForIntroductoryCall(){
-      this.filteredQuesData.forEach((section: any, j: number) => {
-        section.questionnaires.forEach((question: any, i: number) => {
-          if(this.enableChildForm && (question.question.toLowerCase().includes('is hrp')  || question.question.toLowerCase().includes('high risk pregnancy'))){
-            this.filteredQuesData[j].questionnaires.splice(i, 1);
-          } else if(!this.enableChildForm && (question.question.toLowerCase().includes('is hrni') || question.question.toLowerCase().includes('high risk newborn') 
-          || question.question.toLowerCase().includes('high risk infant'))){
-            this.filteredQuesData[j].questionnaires.splice(i, 1);
-          }
-        });
-      });
-    }
+    // filterHrpHrniQuesForIntroductoryCall(){
+    //   this.filteredQuesData.forEach((section: any, j: number) => {
+    //     section.questionnaires.forEach((question: any, i: number) => {
+    //       if(this.enableChildForm && (question.question.toLowerCase().includes('is hrp')  || question.question.toLowerCase().includes('high risk pregnancy'))){
+    //         this.filteredQuesData[j].questionnaires.splice(i, 1);
+    //       } else if(!this.enableChildForm && (question.question.toLowerCase().includes('is hrni') || question.question.toLowerCase().includes('high risk newborn') 
+    //       || question.question.toLowerCase().includes('high risk infant'))){
+    //         this.filteredQuesData[j].questionnaires.splice(i, 1);
+    //       }
+    //     });
+    //   });
+    // }
 
   isStepValid(stepIndex: number): boolean {
       const step = this.filteredQuesData[stepIndex];
@@ -548,80 +600,80 @@ export class EcdQuestionnaireComponent implements OnInit {
     });
   }
 
-  checkIsHrp(value: any){
-    if(value.toLowerCase() === "yes")
-    this.enableHrpReasons = true;
-    else {
-      this.enableHrpReasons = false;
-      this.enableOtherHrp = false;
-      this.hrpReasons = null;
-      this.otherHrPReason = null;
-      }
-    }
+  // checkIsHrp(value: any){
+  //   if(value.toLowerCase() === "yes")
+  //   this.enableHrpReasons = true;
+  //   else {
+  //     this.enableHrpReasons = false;
+  //     this.enableOtherHrp = false;
+  //     this.hrpReasons = null;
+  //     this.otherHrPReason = null;
+  //     }
+  //   }
 
-  checkHrpReasons(hrpReasons: any){
-    if(hrpReasons.includes("Other"))
-    this.enableOtherHrp = true;
-    else {
-      this.enableOtherHrp = false;
-      this.otherHrPReason = null;
-    }
+  // checkHrpReasons(hrpReasons: any){
+  //   if(hrpReasons.includes("Other"))
+  //   this.enableOtherHrp = true;
+  //   else {
+  //     this.enableOtherHrp = false;
+  //     this.otherHrPReason = null;
+  //   }
     
-  }
+  // }
 
-  checkHrniReasons(hrniReasons: any){
-    if(hrniReasons.includes("Newborn with Congenital Anomalies"))
-    this.enableCongentialAnomalies = true;
-    else {
-    this.enableCongentialAnomalies = false;
-    this.enableOtherCongential = false;
-    this.enableProbableCauseDefect = false;
-    this.congentialAnomaliesReasons = null;
-    this.otherCongentialAnomalie = null;
-    this.probableDefectCause = null;
-    }
+  // checkHrniReasons(hrniReasons: any){
+  //   if(hrniReasons.includes("Newborn with Congenital Anomalies"))
+  //   this.enableCongentialAnomalies = true;
+  //   else {
+  //   this.enableCongentialAnomalies = false;
+  //   this.enableOtherCongential = false;
+  //   this.enableProbableCauseDefect = false;
+  //   this.congentialAnomaliesReasons = null;
+  //   this.otherCongentialAnomalie = null;
+  //   this.probableDefectCause = null;
+  //   }
 
-    if(hrniReasons.includes("Other"))
-    this.enableOtherHrni = true;
-    else {
-    this.enableOtherHrni = false;
-    this.otherHrniReason = null;
-    }
-  }
+  //   if(hrniReasons.includes("Other"))
+  //   this.enableOtherHrni = true;
+  //   else {
+  //   this.enableOtherHrni = false;
+  //   this.otherHrniReason = null;
+  //   }
+  // }
 
-  checkCongentialAnomaliesReasons(congentialAnomaliesReasons: any){
-    if(congentialAnomaliesReasons.includes("Others"))
-    this.enableOtherCongential = true;
-    else {
-    this.enableOtherCongential = false;
-    this.otherCongentialAnomalie = null;
-    }
-    if(congentialAnomaliesReasons.includes("Possible Cause of defect"))
-    this.enableProbableCauseDefect = true;
-    else {
-    this.enableProbableCauseDefect = false;
-    this.probableDefectCause = null;
-    }
-  }
+  // checkCongentialAnomaliesReasons(congentialAnomaliesReasons: any){
+  //   if(congentialAnomaliesReasons.includes("Others"))
+  //   this.enableOtherCongential = true;
+  //   else {
+  //   this.enableOtherCongential = false;
+  //   this.otherCongentialAnomalie = null;
+  //   }
+  //   if(congentialAnomaliesReasons.includes("Possible Cause of defect"))
+  //   this.enableProbableCauseDefect = true;
+  //   else {
+  //   this.enableProbableCauseDefect = false;
+  //   this.probableDefectCause = null;
+  //   }
+  // }
 
-  checkIsHrni(value: any){
-    if(value.toLowerCase() === "yes")
-    this.enableHrniReasons = true;
-    else {
-    this.enableHrniReasons = false;
-    this.enableCongentialAnomalies = false;
-    this.enableOtherHrni = false;
-    this.enableOtherCongential = false;
-    this.enableProbableCauseDefect = false;
-    this.otherHrniReason = false;
-    this.hrniReasons = null;
-    this.otherHrniReason = null;
-    this.congentialAnomaliesReasons = null;
-    this.otherCongentialAnomalie = null;
-    this.probableDefectCause = null;
-    }
+  // checkIsHrni(value: any){
+  //   if(value.toLowerCase() === "yes")
+  //   this.enableHrniReasons = true;
+  //   else {
+  //   this.enableHrniReasons = false;
+  //   this.enableCongentialAnomalies = false;
+  //   this.enableOtherHrni = false;
+  //   this.enableOtherCongential = false;
+  //   this.enableProbableCauseDefect = false;
+  //   this.otherHrniReason = false;
+  //   this.hrniReasons = null;
+  //   this.otherHrniReason = null;
+  //   this.congentialAnomaliesReasons = null;
+  //   this.otherCongentialAnomalie = null;
+  //   this.probableDefectCause = null;
+  //   }
 
-  }
+  // }
 
   saveQuestionnaire(){
     if(!this.isFormValid()){
@@ -635,42 +687,45 @@ export class EcdQuestionnaireComponent implements OnInit {
       if(element.questionnaires){
       element.questionnaires.forEach((item: any) => {
         if(item.questionType.toLowerCase() === "question"){
-          if(item.question.toLowerCase().includes('is hrp')  || item.question.toLowerCase().includes('high risk pregnancy')) { 
-            arr = {
-              sectionId: item.sectionid,
-              questionId: item.questionid,
-              question: item.question,
-              answer: (item.answer !== null && item.answer !== "") ? item.answer : null,
-              reasonsForHrp: this.hrpReasons,
-              otherHrpReason: (this.otherHrPReason !== null && this.otherHrPReason !== "") ? this.otherHrPReason : null
-            }
-            if(this.hrpReasons && this.hrpReasons.length > 0){
-            this.associateAnmMoService.isHighRiskPregnancy = true;
-            }
-          }
-          else if(item.question.toLowerCase().includes('is hrni') || item.question.toLowerCase().includes('high risk newborn') 
-          || item.question.toLowerCase().includes('high risk infant')){
+        //   if(item.question.toLowerCase().includes('is hrp')  || item.question.toLowerCase().includes('high risk pregnancy')) { 
+        //     arr = {
+        //       sectionId: item.sectionid,
+        //       questionId: item.questionid,
+        //       question: item.question,
+        //       answer: (item.answer !== null && item.answer !== "") ? item.answer : null,
+        //       reasonsForHrp: this.hrpReasons,
+        //       otherHrpReason: (this.otherHrPReason !== null && this.otherHrPReason !== "") ? this.otherHrPReason : null
+        //     }
+        //     if(this.hrpReasons && this.hrpReasons.length > 0){
+        //     this.associateAnmMoService.isHighRiskPregnancy = true;
+        //     }
+        //   }
+        //   else if(item.question.toLowerCase().includes('is hrni') || item.question.toLowerCase().includes('high risk newborn') 
+        //   || item.question.toLowerCase().includes('high risk infant')){
+        //   arr = {
+        //     sectionId: item.sectionid,
+        //     questionId: item.questionid,
+        //     question: item.question,
+        //     answer: (item.answer !== null && item.answer !== "") ? item.answer : null,
+        //     reasonsForHrni: this.hrniReasons,
+        //     otherHrni: (this.otherHrniReason !== null && this.otherHrniReason !== "") ? this.otherHrniReason : null,
+        //     congentialAnomalies: this.congentialAnomaliesReasons,
+        //     otherCongentialAnomalies: (this.otherCongentialAnomalie !== null && this.otherCongentialAnomalie !== "") ? this.otherCongentialAnomalie : null,
+        //     probableCauseOfDefect: (this.probableDefectCause !== null && this.probableDefectCause !== "") ? this.probableDefectCause : null
+        //   }
+        //   if(this.hrniReasons && this.hrniReasons.length > 0){
+        //   this.associateAnmMoService.isHighRiskInfant = true;
+        //   }
+        // } else {
           arr = {
             sectionId: item.sectionid,
             questionId: item.questionid,
             question: item.question,
-            answer: (item.answer !== null && item.answer !== "") ? item.answer : null,
-            reasonsForHrni: this.hrniReasons,
-            otherHrni: (this.otherHrniReason !== null && this.otherHrniReason !== "") ? this.otherHrniReason : null,
-            congentialAnomalies: this.congentialAnomaliesReasons,
-            otherCongentialAnomalies: (this.otherCongentialAnomalie !== null && this.otherCongentialAnomalie !== "") ? this.otherCongentialAnomalie : null,
-            probableCauseOfDefect: (this.probableDefectCause !== null && this.probableDefectCause !== "") ? this.probableDefectCause : null
+            answer: (item.answer !== null && item.answer !== "") 
+                    ? (Array.isArray(item.answer) 
+                    ? item.answer.join(" || ") : item.answer) : null
           }
-          if(this.hrniReasons && this.hrniReasons.length > 0){
-          this.associateAnmMoService.isHighRiskInfant = true;
-          }
-        } else {
-          arr = {
-            sectionId: item.sectionid,
-            questionId: item.questionid,
-            answer: (item.answer !== null && item.answer !== "") ? item.answer : null
-          }
-        }
+        // }
           saveQuestionsData.push(arr);
         }
       });
