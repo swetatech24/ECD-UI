@@ -513,18 +513,24 @@ export class EcdQuestionnaireComponent implements OnInit {
       this.filteredQuesData.forEach((section: any) => {
         section.questionnaires.forEach((questionnaire: any) => {
           if (selectedAnsweredQues.answerType != null && selectedAnsweredQues.answerType != undefined &&
-            (selectedAnsweredQues.answerType.toLowerCase() === "radio" || selectedAnsweredQues.answerType.toLowerCase() === "dropdown") &&
-            questionnaire.parentQuestionId === selectedAnsweredQues.questionid &&
-            questionnaire.parentAnswer === selectedAnsweredQues.answer
-          ) {
-            console.log('Matching questionnaire found:', questionnaire);
-            questionnaire.enabledQues = true;
+            (selectedAnsweredQues.answerType.toLowerCase() === "radio" || selectedAnsweredQues.answerType.toLowerCase() === "dropdown")) {
+            if(questionnaire.parentQuestionId === selectedAnsweredQues.questionid &&
+            questionnaire.parentAnswer === selectedAnsweredQues.answer) {
+              console.log('Matching questionnaire found:', questionnaire);
+              questionnaire.enabledQues = true;
+            } else if(questionnaire.parentQuestionId === selectedAnsweredQues.questionid &&
+              questionnaire.parentAnswer === selectedAnsweredQues.answer) {
+              questionnaire.enabledQues = false;
+            }
           } else if (selectedAnsweredQues.answerType != null && selectedAnsweredQues.answerType != undefined &&
-            selectedAnsweredQues.answerType.toLowerCase() === "multiple" && 
-            questionnaire.parentQuestionId === selectedAnsweredQues.questionid &&
-            selectedAnsweredQues.answer.includes(questionnaire.parentAnswer)
-          ) {
-            questionnaire.enabledQues = true;
+            selectedAnsweredQues.answerType.toLowerCase() === "multiple") {
+              if(questionnaire.parentQuestionId === selectedAnsweredQues.questionid &&
+                  selectedAnsweredQues.answer.includes(questionnaire.parentAnswer)) {
+                questionnaire.enabledQues = true;
+              } else if(questionnaire.parentQuestionId === selectedAnsweredQues.questionid &&
+                        selectedAnsweredQues.answer.includes(questionnaire.parentAnswer)) {
+                          questionnaire.enabledQues = false;
+              }
           }
         });
       });
@@ -555,7 +561,7 @@ export class EcdQuestionnaireComponent implements OnInit {
       const step = this.filteredQuesData[stepIndex];
       for (const question of step.questionnaires) {
         if (question && question.questionType === 'Question') {
-          if (question.answer === null || question.answer === '' || question.answer === undefined) {
+          if (question.enabledQues != false && (question.answer === null || question.answer === '' || question.answer === undefined)) {
             return false; 
           }
         }

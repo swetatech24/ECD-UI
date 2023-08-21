@@ -439,6 +439,6 @@
   "editQuestionaireMapping":"Edit Questionaire Mapping",
   "adQuestion":"Question Mapping",
   "age": "Age",
-  "isWrongNumber" : "Is Wrong Number",
+  "isWrongNumber" : "Is Wrong Number*:",
   "pleaseValidateAge": "Please enter a valid age between 12 and 120 years"
 }
