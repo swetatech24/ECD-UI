@@ -76,6 +76,7 @@ export class EcdQuestionnaireComponent implements OnInit {
   showstepper: boolean = false;
   benData: any;
   disableFields: any = true;
+  formattedDOB: string = '';
   
 
   constructor(
@@ -142,11 +143,15 @@ export class EcdQuestionnaireComponent implements OnInit {
       if(res == true){
         if(this.associateAnmMoService.selectedBenDetails){
           this.benData = this.associateAnmMoService.selectedBenDetails;
-          if(this.benData.mctsidNoChildId){
+          if(this.benData.mctsidNoChildId && this.benData.dob){
             this.childId = this.benData.mctsidNoChildId;
             this.beneficiaryChildDataForm.patchValue(this.benData);
+
+            const dobDate = new Date(this.benData.dob);
+            this.formattedDOB = dobDate.toISOString().split('T')[0];
             this.beneficiaryChildDataForm.patchValue({
-              childId: this.benData.mctsidNoChildId
+              childId: this.benData.mctsidNoChildId,
+              dob: this.formattedDOB
             });
             this.enableChildForm = true;
           } else{
