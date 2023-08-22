@@ -520,21 +520,24 @@ export class EcdQuestionnaireComponent implements OnInit {
           if (selectedAnsweredQues.answerType != null && selectedAnsweredQues.answerType != undefined &&
             (selectedAnsweredQues.answerType.toLowerCase() === "radio" || selectedAnsweredQues.answerType.toLowerCase() === "dropdown")) {
             if(questionnaire.parentQuestionId === selectedAnsweredQues.questionid &&
-            questionnaire.parentAnswer === selectedAnsweredQues.answer) {
-              console.log('Matching questionnaire found:', questionnaire);
+              selectedAnsweredQues.answer != null && questionnaire.parentAnswer === selectedAnsweredQues.answer) {
               questionnaire.enabledQues = true;
-            } else if(questionnaire.parentQuestionId === selectedAnsweredQues.questionid &&
-              questionnaire.parentAnswer === selectedAnsweredQues.answer) {
+            } else if((questionnaire.parentQuestionId === selectedAnsweredQues.questionid) &&
+                        (selectedAnsweredQues.answer == null || questionnaire.parentAnswer !== selectedAnsweredQues.answer)) {
               questionnaire.enabledQues = false;
+              questionnaire.answer = null;
+              this.processFilteredQuestionnaires(questionnaire);
             }
           } else if (selectedAnsweredQues.answerType != null && selectedAnsweredQues.answerType != undefined &&
             selectedAnsweredQues.answerType.toLowerCase() === "multiple") {
               if(questionnaire.parentQuestionId === selectedAnsweredQues.questionid &&
-                  selectedAnsweredQues.answer.includes(questionnaire.parentAnswer)) {
+                selectedAnsweredQues.answer != null && selectedAnsweredQues.answer.includes(questionnaire.parentAnswer)) {
                 questionnaire.enabledQues = true;
-              } else if(questionnaire.parentQuestionId === selectedAnsweredQues.questionid &&
-                        selectedAnsweredQues.answer.includes(questionnaire.parentAnswer)) {
+              } else if((questionnaire.parentQuestionId === selectedAnsweredQues.questionid) && 
+                        (selectedAnsweredQues.answer == null || !selectedAnsweredQues.answer.includes(questionnaire.parentAnswer))) {
                           questionnaire.enabledQues = false;
+                          questionnaire.answer = null;
+                          this.processFilteredQuestionnaires(questionnaire);
               }
           }
         });
