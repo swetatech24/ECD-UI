@@ -155,6 +155,7 @@ export const environment = {
   getMappedCycleURL:`${ECD_API}sampleSelectionConfiguration/getByPSMId`,
   updateCycleConfigurationURL:`${ECD_API}sampleSelectionConfiguration/update`,
   getAgentMastersUrl:`${ECD_API}master/getAgentsByRoleId`,
+  getCaseSheetDataURL:`${ECD_API}qualityAudit/getBeneficiaryCasesheet`,
   /** Associate-anm-mo Urls */
   getAgentAuditScoreUrl: `${ECD_API}autoPreviewDialing/getRatingsByUserIdAndPsmId`,
   updateCallClosureUrl:`${ECD_API}closure/closeCall`,

@@ -443,6 +443,22 @@
   "adQuestion":"Question Mapping",
   "age": "Age",
   "isWrongNumber" : "Is Wrong Number",
-  "pleaseValidateAge": "Please enter a valid age between 12 and 120 years"
+  "pleaseValidateAge": "Please enter a valid age between 12 and 120 years",
+  "casesheet":"Case Sheet",
+  "beneficiaryDetails":"Beneficiary Details",
+  "questionnaireDetails":"Questionaire Details",
+  "callClosureDetails":"Call Closure Details",
+  "benRegID":"Beneficiary ID",
+  "benCallID":"Ben Call ID",
+  "outboundCallType":"Outbound Call Type",
+  "isFurtherCallRequired":"Is Further Call Required",
+  "isCallAnswered":"Is Call Answered",
+  "reasonForCallNotAnswered":"Reason For Call Not Answered",
+  "isCallDisconnected":"is Call Disconnected",
+  "isCallVerified":"Is Call Verified",
+  "createdDate":"Created Date",
+  "reasonForNoFurtherCalls":"Reason For No FurtherCalls",
+  "nextAttemptDate":"Next Attempt Date",
+  "childID":"Child ID"
   
 }
