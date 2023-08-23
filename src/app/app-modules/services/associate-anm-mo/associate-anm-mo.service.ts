@@ -135,8 +135,8 @@ clearCallClosure()
     return this.http.get(environment.getAgentMasterDataUrl);
   }
 
-  fetchBeneficiaryQuestionnaire(reqObj: any, callType: any){
-    return this.http.get(environment.getBeneficiaryQuestionnaire + reqObj + '/' + callType);
+  fetchBeneficiaryQuestionnaire(reqObj: any, callType: any, role:any){
+    return this.http.get(environment.getBeneficiaryQuestionnaire + reqObj + '/' + callType + '/' + role);
   }
 
   saveQuestionnaireResponse(reqObj: any){

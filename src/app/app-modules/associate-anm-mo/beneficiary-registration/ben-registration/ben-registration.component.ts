@@ -753,12 +753,12 @@ console.log(reqObj);
     ageEntered() {
     this.valueEntered = this.benRegistrationForm.controls.age.value;
     if (this.valueEntered) {
-      if (
-        this.valueEntered > this.ageLimit
-        
-      ) {
-   this.confirmationService.openDialog( this.currentLanguageSet.pleaseValidateAge, 'warn');
-
+      if(this.valueEntered < 12) {
+        this.confirmationService.openDialog( this.currentLanguageSet.pleaseValidateAge, 'warn');
+        this.benRegistrationForm.patchValue({ age: null });
+      }
+      else if (this.valueEntered > this.ageLimit) {
+        this.confirmationService.openDialog( this.currentLanguageSet.pleaseValidateAge, 'warn');
         this.benRegistrationForm.patchValue({ age: null });
       } 
     }
