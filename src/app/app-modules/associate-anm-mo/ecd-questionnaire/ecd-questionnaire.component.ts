@@ -430,7 +430,8 @@ export class EcdQuestionnaireComponent implements OnInit {
    getEcdQuestionaire(){
      let psmId = sessionStorage.getItem('providerServiceMapID');
      let callType = this.benData.outboundCallType;
-     this.associateAnmMoService.fetchBeneficiaryQuestionnaire(psmId, callType).subscribe((res: any) => {
+     let role = sessionStorage.getItem('role');
+     this.associateAnmMoService.fetchBeneficiaryQuestionnaire( psmId,callType,role).subscribe((res: any) => {
        if(res && res.length > 0){
          this.filterEcdQuestionnaire(res);
          this.refresh()
