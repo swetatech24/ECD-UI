@@ -129,6 +129,18 @@
                 <th mat-header-cell *matHeaderCellDef> {{currentLanguageSet?.callType}} </th>
                 <td mat-cell *matCellDef="let element"> {{element.outboundCallType}} </td>
             </ng-container>
+            <ng-container matColumnDef="casesheet">
+              <th mat-header-cell  *matHeaderCellDef style="padding-left: 20px;border-bottom: none">{{ currentLanguageSet?.casesheet }}</th>
+              <td mat-cell *matCellDef="let element" style="padding-left: 20px">
+                <mat-icon
+                  matTooltip="View Casesheet"
+                  class="mat-icon material-icons"
+                  role="img"
+                  aria-hidden="true"
+                  (click)="viewCasheet(element)"
+                  style="cursor: pointer">description</mat-icon>
+              </td>
+            </ng-container>
             
             <ng-container matColumnDef="action">
                 <th mat-header-cell *matHeaderCellDef></th>

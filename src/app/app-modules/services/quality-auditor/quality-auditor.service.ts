@@ -78,5 +78,8 @@ export class QualityAuditorService {
   getCallRecording(reqObj: any){
     return this.http.post(environment.getCallRecordingUrl,reqObj);
   }
+  getCaseSheetDataFromService(reqObj: any){
+    return this.http.post(environment.getCaseSheetDataURL,reqObj);
+  }
 
 }

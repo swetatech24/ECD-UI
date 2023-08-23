@@ -33,6 +33,7 @@ import { MasterService } from 'src/app/app-modules/services/masterService/master
 import { QualityAuditorService } from 'src/app/app-modules/services/quality-auditor/quality-auditor.service';
 import { SetLanguageService } from 'src/app/app-modules/services/set-language/set-language.service';
 import { CallRatingComponent } from '../../call-rating/call-rating.component';
+import { ViewCasesheetComponent } from '../../view-casesheet/view-casesheet.component';
 
 @Component({
   selector: 'app-call-audit',
@@ -49,7 +50,7 @@ export class CallAuditComponent implements OnInit {
   agents: any = [];
 
   // callAuditData: any = [];
-  displayedColumns: string[] = ['sNo', 'beneficiaryId', 'beneficiaryName', 'phoneNumber', 'agentName', 'callType' ,'action'];
+  displayedColumns: string[] = ['sNo', 'beneficiaryId', 'beneficiaryName', 'phoneNumber', 'agentName', 'callType' ,'casesheet','action'];
   searchTerm: any;
 
   callAuditData = new MatTableDataSource();
@@ -302,5 +303,15 @@ export class CallAuditComponent implements OnInit {
     this.callData = res;
     this.callAuditData.data = res;
     this.callAuditData.paginator = this.paginator;
+  }
+  viewCasheet(element:any){
+    let reqObj={
+      benCallId:element.benCallID,
+      beneficiaryId:element.beneficiaryid
+    }
+    this.qualityAuditorService.loadComponent(
+      ViewCasesheetComponent,
+      reqObj
+    );
   }
 }
