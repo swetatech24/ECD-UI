@@ -33,6 +33,13 @@
                             <th id="childId">{{ currentLanguageSet?.childID}}</th>
                             <td> {{beneficiaryCaseSheetData?.childId}} </td>
                           </tr>
+                          <tr *ngIf = "beneficiaryCaseSheetData?.childId">
+                            <th id="childName">{{ currentLanguageSet?.childName}}</th>
+                            <td> {{beneficiaryCaseSheetData?.beneficiaryName}} </td>
+                              <th id="createdDate"> {{ currentLanguageSet?.createdDate }}</th>
+                              <td> {{beneficiaryCaseSheetData?.createdDate | date: 'dd/MM/yyyy' }} </td>
+                           </tr>
+                  
                           <tr>
                             <th id="gender">{{ currentLanguageSet?.gender}}</th>
                             <td> {{beneficiaryCaseSheetData?.genderName}} </td>
@@ -87,7 +94,7 @@
                             <th id="outboundCallType">{{ currentLanguageSet?.outboundCallType}}</th>
                             <td> {{beneficiaryCaseSheetData?.outboundCallType}}</td>
                           </tr>
-                          <tr >
+                          <tr  *ngIf = "!beneficiaryCaseSheetData?.childId">
                             <th id="createdDate"> {{ currentLanguageSet?.createdDate }}</th>
                             <td> {{beneficiaryCaseSheetData?.createdDate | date: 'dd/MM/yyyy' }} </td>
                           </tr>
