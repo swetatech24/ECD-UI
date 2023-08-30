@@ -53,6 +53,9 @@ export class QualityAuditorService {
   getQualityAuditorWorklist(reqObj: any){
     return this.http.post(environment.getAuditorWorklistUrl, reqObj);
   }
+  getQualityAuditorDateWorklist(reqObj: any){
+    return this.http.post(environment.getDateWiseAuditorWorklistUrl, reqObj);
+  }
 
   getQualityAuditGrades(psmId: any){
     return this.http.get(environment.getQualityAuditGradesByPsmIdUrl + psmId);
