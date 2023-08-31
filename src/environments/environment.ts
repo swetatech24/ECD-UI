@@ -138,6 +138,7 @@ export const environment = {
 
   /**Quality Auditor Urls */
   getAuditorWorklistUrl: `${ECD_API}qualityAudit/getQualityAuditorWorklist`,
+  getDateWiseAuditorWorklistUrl:  `${ECD_API}qualityAudit/getQualityAuditorWorklistDatewise`,
   getLanguageMasterUrl:  `${ECD_API}master/getLanguage`, 
   getLanguageMasterByUserIdUrl:  `${ECD_API}master/getLanguageByUserId/`, 
   getQualityAuditGradesByPsmIdUrl: `${ECD_API}qualityAudit/getQualityAuditGradesByPSMID/`,

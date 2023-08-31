@@ -89,6 +89,7 @@ export const environment = {
   publishAlertURL: `${COMMON_API}alerts/publishAlerts`,
   publishNotificationURL: `${COMMON_API}notifications/publishNotifications`,
   publishLocationMessagesURL: `${COMMON_API}locationMessages/publishLocationMessage`,
+  getDateWiseAuditorWorklistUrl:  `${ECD_API}qualityAudit/getQualityAuditorWorklistDatewise`,
 
   saveQuestionnaireSectionMappingUrl: `${ECD_API}Questionnaire/mapQuestionnairesAndSection`,
   updateQuestionnaireSectionMappingUrl: `${ECD_API}Questionnaire/editQuestionnaireSectionMap`,

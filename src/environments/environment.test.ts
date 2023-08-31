@@ -77,6 +77,7 @@ export const environment = {
   getNotificationTypeUrl: `${COMMON_API}notification/getNotificationType`,
   createSuprSectionConfigurationUrl: `${ECD_API}Questionnaire/createSections`,
   updateSuprSectionConfigurationUrl: `${ECD_API}Questionnaire/updateSection`,
+  getDateWiseAuditorWorklistUrl:  `${ECD_API}qualityAudit/getQualityAuditorWorklistDatewise`,
 
   getQuestionnaireTypeUrl: `${ECD_API}master/getQuestionnaireType`,
   getAnswerTypeUrl: `${ECD_API}master/getAnswerType`,
