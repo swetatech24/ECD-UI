@@ -620,7 +620,7 @@
 
                     <mat-radio-group *ngIf="ques?.answerType?.toLowerCase() === 'radio'"
                     [(ngModel)]="ques.answer" (change)="processFilteredQuestionnaires(ques)" required>
-                      <mat-radio-button style="margin-left: 5px; margin-right: 5px;" *ngFor="let option of ques.options" [value]="option.options">
+                      <mat-radio-button class="radioButtonFontStyle" style="margin-left: 5px; margin-right: 5px;" *ngFor="let option of ques.options" [value]="option.options">
                         {{option.options}}
                       </mat-radio-button>
                       <mat-error style="font-size: 15px;" *ngIf="validateAnswer && (ques.answer === null || ques.answer === '' || ques.answer === undefined)">Please enter mandatory field</mat-error>
