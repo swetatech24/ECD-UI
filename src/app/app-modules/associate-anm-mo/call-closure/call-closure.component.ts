@@ -340,6 +340,9 @@ private sms_service: SmsTemplateService,
        this.associateAnmMoService.callClosure(reqObj).subscribe(
         (response: any) => {
           if (response) {
+            console.log("timer yet to stop");
+            this.associateAnmMoService.setStopTimer(true);
+            console.log("timer stopped");
             this.unsubscribeWrapupTime();
             sessionStorage.setItem("onCall", "false");
             this.associateAnmMoService.fromComponent = null;

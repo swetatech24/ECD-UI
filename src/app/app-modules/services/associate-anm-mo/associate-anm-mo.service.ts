@@ -77,6 +77,10 @@ export class AssociateAnmMoService {
   resetAgentStatusFlag = new BehaviorSubject(this.resetAgentStatus);
   resetAgentStatusFlag$ = this.resetAgentStatusFlag.asObservable();
 
+  stopTimer: any="";
+  stopTimerFlag = new BehaviorSubject(this.stopTimer);
+  stopTimerFlag$ = this.stopTimerFlag.asObservable();
+
   constructor(private http: HttpClient,  private resolver: ComponentFactoryResolver) { }
 
 
@@ -231,6 +235,16 @@ getCallHistoryDetails(reqObj:any){
 setResetAgentStatus(value:any) {
   this.resetAgentStatus = value;
   this.resetAgentStatusFlag.next(this.resetAgentStatus);
+}
+
+setStopTimer(value: any) {
+  this.stopTimer = value;
+  this.stopTimerFlag.next(this.stopTimer);
+}
+
+clearStopTimer() {
+  this.stopTimer = null;
+  this.stopTimerFlag.next(this.stopTimer);
 }
 
 }
