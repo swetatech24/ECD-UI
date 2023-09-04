@@ -78,6 +78,7 @@ export class CallAuditComponent implements OnInit {
     end: new FormControl('', [Validators.required])
   });
   showAgentId: boolean = false;
+  
   selectedFormValue: any = [];
   selectedDateFormValue: any = [];
   today = new Date();
