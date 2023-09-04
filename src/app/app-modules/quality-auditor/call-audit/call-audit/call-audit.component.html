@@ -16,7 +16,7 @@
 </div>
 
 <mat-card class="fontStyle innerCard">
-  <form [formGroup]="cycleWiseForm" class="fontStyle" *ngIf="cycleWiseChangeForm">
+  <form [formGroup]="cycleWiseForm" class="fontStyle" *ngIf="iscycleWiseChangeForm">
       <mat-form-field id="fieldBox" appearance="outline" class="backgroundWhite dropdownAlignment fontStyle" >
           <mat-label>Year</mat-label>
           <mat-select formControlName="year" (selectionChange)="getMonths()">
@@ -53,7 +53,7 @@
           <mat-label class="fontStyle">{{ currentLanguageSet?.agentName }}</mat-label>
           <mat-select formControlName="agentId">
               <mat-option class="fontStyle" *ngFor="let agent of agents" [value]="agent.userId">
-                  {{ agent.firstName}} {{ agent.lastName}}
+                {{ agent?.firstName | titlecase }} {{ agent?.lastName | titlecase }} {{ (agent?.agentId != null && agent?.agentId != undefined) ? ',' : '' }} {{ agent?.agentId }}
               </mat-option>
           </mat-select>
       </mat-form-field>
@@ -77,21 +77,21 @@
       </button>
       
   </form>
-  <form [formGroup]="dateWiseForm" class="fontStyle" *ngIf="dateWiseChangeForm">
+  <form [formGroup]="dateWiseForm" class="fontStyle" *ngIf=" !iscycleWiseChangeForm">
       <mat-form-field
       appearance="outline"
       class="backgroundWhite dropdownAlignment fontStyle" 
     >
       <mat-label class="fontStyle">{{ currentLanguageSet?.enterDateRange }}</mat-label>
-      <mat-date-range-input [formGroup]="range" [rangePicker]="picker" >
+      <mat-date-range-input  [rangePicker]="picker" [max]="today" >
         <input
           matStartDate
           formControlName="start"
           placeholder="{{ currentLanguageSet?.startDate }}"
-          (dateChange)="validateTime(range.controls.start.value, range.controls.end.value,dateWiseForm.controls['startTime'].value,dateWiseForm.controls['endTime'].value)"
+          (dateChange)="validateTime(dateWiseForm.controls.start.value, dateWiseForm.controls.end.value,dateWiseForm.controls['start'].value,dateWiseForm.controls['endTime'].value)"
         />
         <input
-        (dateChange)="validateTime(range.controls.start.value, range.controls.end.value,dateWiseForm.controls['startTime'].value,dateWiseForm.controls['endTime'].value)"
+        (dateChange)="validateTime(dateWiseForm.controls.start.value, dateWiseForm.controls.end.value,dateWiseForm.controls['start'].value,dateWiseForm.controls['endTime'].value)"
           matEndDate
           formControlName="end"
           placeholder="{{ currentLanguageSet?.endDate }}"
@@ -100,15 +100,15 @@
       <mat-hint class="font-style">MM/DD/YYYY – MM/DD/YYYY</mat-hint>
       <mat-datepicker-toggle
         matSuffix
-        [for]="picker"
+        [for]="picker"  
       ></mat-datepicker-toggle>
       <mat-date-range-picker #picker></mat-date-range-picker>
 
       <mat-error
-        *ngIf="range.controls.start.hasError('matStartDateInvalid')"
+        *ngIf="dateWiseForm.controls.start.hasError('matStartDateInvalid')"
         >{{ currentLanguageSet?.invalidStartDate }}</mat-error
       >
-      <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">{{
+      <mat-error *ngIf="dateWiseForm.controls.end.hasError('matEndDateInvalid')">{{
         currentLanguageSet?.invalidEndDate
       }}</mat-error>
     </mat-form-field>
@@ -196,7 +196,7 @@
         <mat-icon matSuffix>search</mat-icon>
       </mat-form-field>
     </div>
-    <div class="mat-elevation-z8 responsiveTable" style="margin-top: 30px" *ngIf="callAuditData.filteredData.length > 0 && dateWiseChangeForm">
+    <div class="mat-elevation-z8 responsiveTable" style="margin-top: 30px" *ngIf="callAuditData.filteredData.length > 0 && !iscycleWiseChangeForm">
       <table class="alignTable" mat-table [dataSource]="callAuditData">
           <ng-container matColumnDef="sNo">
               <th mat-header-cell *matHeaderCellDef>S.No.</th>
@@ -276,7 +276,7 @@
       <strong>{{ currentLanguageSet?.noRecordsFound }}</strong>
     </div>
   </div>
-  <div class="mat-elevation-z8 responsiveTable" style="margin-top: 30px" *ngIf="callAuditData.filteredData.length > 0 && cycleWiseChangeForm">
+  <div class="mat-elevation-z8 responsiveTable" style="margin-top: 30px" *ngIf="callAuditData.filteredData.length > 0 && iscycleWiseChangeForm">
     <table class="alignTable" mat-table [dataSource]="callAuditData">
         <ng-container matColumnDef="sNo">
             <th mat-header-cell *matHeaderCellDef>S.No.</th>
