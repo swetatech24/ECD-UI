@@ -193,7 +193,8 @@ export class CallRatingComponent implements OnInit {
     this.ratedQuestions.forEach((answeredQuestion: any, i: number) => {
     this.ratingQuestions.forEach((element: any) => {
       if(answeredQuestion.questionId === element.questionId){
-        this.ratedQuestions[i].options = element.options
+        this.ratedQuestions[i].options = element.options,
+        this.ratedQuestions[i].isFatalQues = element.isFatalQues
       }
     });
   });
@@ -263,7 +264,6 @@ export class CallRatingComponent implements OnInit {
           questions: [{...curr}]
         });
       }
-  
       return acc;
       }, []).sort((a: { sectionRank: number; }, b: { sectionRank: number; }) => a.sectionRank - b.sectionRank)
       .map((section: any) => ({
@@ -336,11 +336,19 @@ export class CallRatingComponent implements OnInit {
         });
       });
     }
-  
+
+    checkIfZeroCall() {
+      return this.filteredRatingQuestions.some((section: any) => {
+        return section.questions.some((question: any) => {
+          return question.isFatalQues && question.answer.toLowerCase() === "no";
+        });
+      });
+    }
   
   saveRatings(){
     if(this.checkIfValidSubmit()){
     let reqObj: any[] = [];
+    let isZeroCall = this.checkIfZeroCall();
     this.filteredRatingQuestions.forEach((section: any) => {
       section.questions.forEach((question: any) => {
         if (question.score !== null && question.score !== "" && question.answer !== null && question.answer !== "") {
@@ -349,6 +357,7 @@ export class CallRatingComponent implements OnInit {
             questionId: question.questionId,
             answer: question.answer,
             score: question.score,
+            isZeroCall: isZeroCall, 
             finalScore: this.finalScore,
             finalGrade: this.finalGrade,
             callRemarks: this.callRemarks ? this.callRemarks: null,
@@ -388,6 +397,7 @@ export class CallRatingComponent implements OnInit {
 
   updateRatings(){
     let quesObj: any = [];
+    let isZeroCall = this.checkIfZeroCall();
     this.filteredRatingQuestions.forEach((section: any) => {
       section.questions.forEach((question: any) => {
         if (question.score !== null && question.score !== "" && question.answer !== null && question.answer !== "") {
@@ -415,6 +425,7 @@ export class CallRatingComponent implements OnInit {
       id: this.ratingId,
       finalScore: this.finalScore,
       finalGrade: this.finalGrade,
+      isZeroCall: isZeroCall,
       callRemarks: this.callRemarks ? this.callRemarks: null,
       agentId: this.routedData.agentid,
       benCallId: this.routedData.benCallID,

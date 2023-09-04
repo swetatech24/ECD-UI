@@ -23,7 +23,7 @@
 
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { interval, map, Observable, Subscription, take, timer } from 'rxjs';
+import { interval, map, Observable, Subject, Subscription, take, timer } from 'rxjs';
 import { OutboundWorklistComponent } from '../outbound-worklist/outbound-worklist.component';
 import { ConfirmationService } from '../../services/confirmation/confirmation.service';
 import { BenRegistrationComponent } from '../beneficiary-registration/ben-registration/ben-registration.component';
@@ -92,6 +92,7 @@ export class AgentsInnerpageComponent implements OnInit {
    
 
     this.associateAnmMoService.resetOpenComp();
+    this.associateAnmMoService.clearStopTimer();
     this.associateAnmMoService.clearCallClosure();
     this.getSelectedLanguage();
     this.addListener();
@@ -183,7 +184,13 @@ export class AgentsInnerpageComponent implements OnInit {
   
 
     
-
+  this.associateAnmMoService.stopTimerFlag$.subscribe((res: any) => {
+    if(res != undefined && res != null && res == true){
+      this.ticks = 0;
+    }
+    console.log("timer stopped", this.ticks);
+  })
+  console.log("timer stopped now", this.ticks);
   }
   getSelectedLanguage() {
     if (
@@ -534,6 +541,7 @@ export class AgentsInnerpageComponent implements OnInit {
        this.associateAnmMoService.callClosure(reqObj).subscribe(
         (response: any) => {
           if (response) {
+            this.associateAnmMoService.setStopTimer(true);
             this.confirmationService.openDialog(
               this.currentLanguageSet.callClosedSuccessfully,
               'success'

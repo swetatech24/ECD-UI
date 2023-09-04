@@ -439,7 +439,7 @@
   "editQuestionaireMapping":"Edit Questionaire Mapping",
   "adQuestion":"Question Mapping",
   "age": "Age",
-  "isWrongNumber" : "Is Wrong Number",
+  "isWrongNumber" : "Is Wrong Number*:",
   "pleaseValidateAge": "Please enter a valid age between 12 and 120 years",
   "casesheet":"Case Sheet",
   "beneficiaryDetails":"Beneficiary Details",
@@ -456,5 +456,6 @@
   "createdDate":"Created Date",
   "reasonForNoFurtherCalls":"Reason For No FurtherCalls",
   "nextAttemptDate":"Next Attempt Date",
-  "childID":"Child ID"
+  "childID":"Child ID",
+  "isFatalQues": "Fatal Questionnaire"
 }
