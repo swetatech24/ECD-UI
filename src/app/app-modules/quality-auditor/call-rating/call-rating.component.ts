@@ -63,6 +63,7 @@ export class CallRatingComponent implements OnInit {
   filteredRatingQuestions: any = [];
   audioResponse: any = " ";
   ratingId: any;
+  showCallAuditForm : boolean = false;
   ratedQuestions: any =[];
   enableUpdateButton: boolean = false;
   totalScore: number = 0; // Variable to store the total score
@@ -367,6 +368,7 @@ export class CallRatingComponent implements OnInit {
       if(res && res.response){
         this.confirmationService.openDialog(this.currentLanguageSet.successfullyCallRated, 'success');
         this.qualityAuditorService.loadComponent(CallAuditComponent, null);
+        this.qualityAuditorService.showForm = this.showCallAuditForm;
       } else if(res.statusCode !== 200) {
         this.confirmationService.openDialog(res.errorMessage, 'error');
       } else {
@@ -433,6 +435,7 @@ export class CallRatingComponent implements OnInit {
       if(res && res.response){
         this.confirmationService.openDialog(this.currentLanguageSet.successfullyCallRatingUpdated, 'success');
         this.qualityAuditorService.loadComponent(CallAuditComponent, null);
+        this.qualityAuditorService.showForm = this.showCallAuditForm;
       } else if(res.statusCode !== 200) {
         this.confirmationService.openDialog(res.errorMessage, 'error');
       } else {
@@ -448,6 +451,7 @@ export class CallRatingComponent implements OnInit {
 
   backToQualityAudit(){
     this.qualityAuditorService.loadComponent(CallAuditComponent, null);
+    this.qualityAuditorService.showForm = this.showCallAuditForm;
 
   }
 }
