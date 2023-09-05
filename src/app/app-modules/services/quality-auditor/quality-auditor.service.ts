@@ -32,7 +32,9 @@ export class QualityAuditorService {
 
   private container: any;
   private componentRef!: ComponentRef<any>;
-  callAuditData:any;
+  callAuditData:any = [];
+  isCycleWiseForm : boolean = true;
+  showForm : boolean = true;
 
   constructor(
     private http: HttpClient,

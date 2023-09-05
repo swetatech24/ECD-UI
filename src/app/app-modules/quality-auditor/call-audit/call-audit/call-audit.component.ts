@@ -35,6 +35,7 @@ import { SetLanguageService } from 'src/app/app-modules/services/set-language/se
 import { CallRatingComponent } from '../../call-rating/call-rating.component';
 import { ViewCasesheetComponent } from '../../view-casesheet/view-casesheet.component';
 import * as moment from 'moment';
+import { tr } from 'date-fns/locale';
 
 @Component({
   selector: 'app-call-audit',
@@ -49,7 +50,7 @@ export class CallAuditComponent implements OnInit {
  option : any;
  selectedRadioButtonChange: boolean = false;
  dateWiseChangeForm: boolean = false;
- cycleWiseChangeForm: boolean = false;
+ iscycleWiseChangeForm: boolean = true;
   languages: any = [];
 
   agents: any[] = [];
@@ -72,11 +73,15 @@ export class CallAuditComponent implements OnInit {
   date = new Date();
  
   showQualityAuditWorklist: boolean = false;
-  range = new FormGroup({
+ range  = new FormGroup({
     start: new FormControl('', [Validators.required]),
     end: new FormControl('', [Validators.required])
   });
   showAgentId: boolean = false;
+  
+  selectedFormValue: any = [];
+  selectedDateFormValue: any = [];
+  today = new Date();
 
   ngAfterViewInit() {
     this.callAuditData.paginator = this.paginator;
@@ -103,7 +108,9 @@ export class CallAuditComponent implements OnInit {
     isValid: ['', Validators.required],
     startTime:[''],
     endTime:[''],
-    phoneNo: new FormControl('', [Validators.required]),
+    phoneNo: new FormControl(''),
+    start: new FormControl('', [Validators.required]),
+    end: new FormControl('', [Validators.required])
   });
   cycleWiseForm = this.fb.group({
     role: ['', Validators.required],
@@ -125,17 +132,27 @@ export class CallAuditComponent implements OnInit {
     for (let i = this.currentYear - 5; i <= this.currentYear; i++) {
       this.years.push(i);
     }
-    if (this.qualityAuditorService.callAuditData != undefined){
-    this.callAuditForm.patchValue(this.qualityAuditorService.callAuditData);
+    this.callAuditForm.controls['selectedRadioButton'].setValue('1');
+    this.iscycleWiseChangeForm = true;
+    if(this.qualityAuditorService.showForm === false){
+    if (this.qualityAuditorService.callAuditData !== undefined && this.qualityAuditorService.callAuditData !== null && this.qualityAuditorService.isCycleWiseForm === true ){
+      this.callAuditForm.controls['selectedRadioButton'].setValue('1');
+      this.iscycleWiseChangeForm = true;
+    this.cycleWiseForm.patchValue(this.qualityAuditorService.callAuditData);
      this.getMonths();
      this.getAgentByRole();
-     
-    this.getQualityAudiotorWorklist();
+     this.getQualityAudiotorWorklist();
+    }else{
+      if(this.qualityAuditorService.callAuditData !== undefined && this.qualityAuditorService.callAuditData !== null){
+      this.callAuditForm.controls['selectedRadioButton'].setValue('2');
+      this.iscycleWiseChangeForm = false;
+      this.dateWiseForm.patchValue(this.qualityAuditorService.callAuditData);
+      this.getAgentByRole();
+      this.getDateWiseAudiotorWorklist();
     }
-    this.callAuditForm.controls['selectedRadioButton'].setValue('1');
-    this.cycleWiseChangeForm = true;
+  }}
   }
-
+  
   getSelectedLanguage() {
     if (
       this.setLanguageService.languageData !== undefined &&
@@ -222,7 +239,7 @@ export class CallAuditComponent implements OnInit {
 
   getAgentByRole(){
     if(this.callAuditForm.controls['selectedRadioButton'].value === '1'){
-    if (this.qualityAuditorService.callAuditData === undefined){
+    if (this.qualityAuditorService.callAuditData === undefined &&  this.qualityAuditorService.callAuditData[0].selectedRadioButton === '1' ){
     this.cycleWiseForm.controls.agentId.reset();
     this.dateWiseForm.controls.agentId.reset();
     }
@@ -240,7 +257,7 @@ export class CallAuditComponent implements OnInit {
     }
     );
   }else{
-    if (this.qualityAuditorService.callAuditData === undefined){
+    if (this.qualityAuditorService.callAuditData === undefined && this.qualityAuditorService.callAuditData[0].selectedRadioButton === '2'){
       this.cycleWiseForm.controls.agentId.reset();
       this.dateWiseForm.controls.agentId.reset();
       }
@@ -340,8 +357,9 @@ export class CallAuditComponent implements OnInit {
       fromDate: null,
       toDate: null
     }
-  
-   this.qualityAuditorService.callAuditData=this.callAuditForm.value;
+    this.qualityAuditorService.isCycleWiseForm = this.iscycleWiseChangeForm ;
+  this.qualityAuditorService.callAuditData = null;
+   this.qualityAuditorService.callAuditData = this.cycleWiseForm.value;
    console.log(this.qualityAuditorService.callAuditData);
     this.qualityAuditorService.getQualityAuditorWorklist(reqObj).subscribe((res: any) => {
       if(res && res.length > 0){
@@ -364,13 +382,14 @@ export class CallAuditComponent implements OnInit {
     }
     );
   }
+    
   else{
     this.getDateWiseAudiotorWorklist();
   }
 }
   getDateWiseAudiotorWorklist(){
-    let fromDate =  moment(this.range.controls.start.value).format('YYYY-MM-DDThh:mm:ssZ');
-    let toDate =  moment(this.range.controls.end.value).format('YYYY-MM-DDThh:mm:ssZ');   
+    let fromDate =  moment(this.dateWiseForm.controls.start.value).format('YYYY-MM-DDThh:mm:ssZ');
+    let toDate =  moment(this.dateWiseForm.controls.end.value).format('YYYY-MM-DDThh:mm:ssZ');   
     let reqObj = {
       psmId: sessionStorage.getItem('providerServiceMapID'),
       languageId: this.dateWiseForm.controls.language.value,
@@ -383,7 +402,9 @@ export class CallAuditComponent implements OnInit {
       beneficiaryPhoneNumber : this.dateWiseForm.controls.phoneNo.value
       
     }
-    this.qualityAuditorService.callAuditData=this.callAuditForm.value;
+    this.qualityAuditorService.isCycleWiseForm = this.iscycleWiseChangeForm ;
+    this.qualityAuditorService.callAuditData = null;
+    this.qualityAuditorService.callAuditData = this.dateWiseForm.value;
     console.log(this.qualityAuditorService.callAuditData);
      this.qualityAuditorService.getQualityAuditorDateWorklist(reqObj).subscribe((res: any) => {
        if(res && res.length > 0){
@@ -455,14 +476,12 @@ export class CallAuditComponent implements OnInit {
   onRadioButtonChange(){
     if(this.callAuditForm.controls['selectedRadioButton'].value === '1') {
       // this.selectedRadioButtonChange = true;
-      this.cycleWiseChangeForm = false;
-      this.dateWiseChangeForm = true;
+      this.iscycleWiseChangeForm = false;
     } else{
-      this.dateWiseChangeForm = false;
-      this.cycleWiseChangeForm = true;
+      this.iscycleWiseChangeForm = true;
     }
     this.callAuditForm.reset();
-    this.range.reset();
+    // this.range.reset();
     this.cycleWiseForm.reset();
     this.dateWiseForm.reset();
     this.callData = [];
