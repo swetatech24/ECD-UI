@@ -284,12 +284,21 @@ export class CallRatingComponent implements OnInit {
       (total: any, question: { score: any; }) => total + (question.score || 0),
       0
     );
+
+    const isZeroCall = this.checkIfZeroCall();
+    // Calculate final score
+    if(isZeroCall) {
+      this.finalScore = 0;
+      this.finalScorePercentage = 0;
+    } else {
     // Calculate final score
     this.finalScore = this.filteredRatingQuestions.reduce(
       (total: any, section: { totalScore: any; }) => total + (section.totalScore || 0),
       0
     );
     this.calculateFinalScorePercentage();
+    // this.getFinalGrade();
+    }
     this.getFinalGrade();
   }
   
@@ -307,7 +316,20 @@ export class CallRatingComponent implements OnInit {
       },
       0
     );
+
+    // Check if any question in this section is fatal and answered "no"
+    const isZeroCallPercentage = this.filteredRatingQuestions.some((section: any) => {
+      return section.questions.some((question: any) => {
+        if(question.answer !== null && question.answer !== undefined)
+        return question.isFatalQues && question.answer.toLowerCase() === "no";
+      });
+    });
+
+    if(isZeroCallPercentage) {
+      this.finalScorePercentage = 0;
+    } else {
     this.finalScorePercentage = (this.finalScore / highestScoresSum) * 100;
+    }
   }
   
   getFinalGrade() {
@@ -340,6 +362,7 @@ export class CallRatingComponent implements OnInit {
     checkIfZeroCall() {
       return this.filteredRatingQuestions.some((section: any) => {
         return section.questions.some((question: any) => {
+          if(question.answer !== null && question.answer !== undefined)
           return question.isFatalQues && question.answer.toLowerCase() === "no";
         });
       });
