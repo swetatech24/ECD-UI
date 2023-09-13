@@ -68,7 +68,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div style="padding: 8px;" class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box m-bottom">
+                        <div *ngIf="showVerifiedFields" style="padding: 8px;" class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box m-bottom">
                             <label style="margin-left: 175px;" class="radio-button-styling" id="isCallVerified">{{currentLanguageSet?.callVerified}}
                             </label>
                             <mat-radio-group required id="isCallVerified" formControlName="isCallVerified"
@@ -87,7 +87,7 @@
                                 <mat-radio-button class="m-10" value="No">{{currentLanguageSet?.no}}</mat-radio-button>
                             </mat-radio-group>
                         </div>
-                        <div style="padding: 8px;" class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box m-bottom">
+                        <div *ngIf="showVerifiedFields" style="padding: 8px;" class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box m-bottom">
                             <label class="radio-button-styling" id="isWrongNumber">{{currentLanguageSet?.isWrongNumber}}
                             </label>
                             <mat-radio-group required id="isWrongNumber" formControlName="isWrongNumber"

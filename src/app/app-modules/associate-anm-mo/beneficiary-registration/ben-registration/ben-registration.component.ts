@@ -45,6 +45,7 @@ import * as moment from 'moment';
   // isEditMode: boolean = true;
   maxDate = new Date();
   minDate = new Date();
+  
  
   currentLanguageSet: any;
   
@@ -78,6 +79,7 @@ import * as moment from 'moment';
   //     }
   // ];
   enableUpdateButton: boolean = false;
+  minimumDate: any;
   
   constructor(
     private fb: FormBuilder,
@@ -145,6 +147,8 @@ else{
     
     this.selectedRole = sessionStorage.getItem('role');
    
+  this.minimumDate = new Date();
+  this.minimumDate.setDate(this.maxDate.getDate()-1000);
   }
 
   getSelectedLanguage() {
@@ -753,7 +757,7 @@ console.log(reqObj);
     ageEntered() {
     this.valueEntered = this.benRegistrationForm.controls.age.value;
     if (this.valueEntered) {
-      if(this.valueEntered < 12) {
+      if(this.valueEntered < 12 || this.valueEntered > 50) {
         this.confirmationService.openDialog( this.currentLanguageSet.pleaseValidateAge, 'warn');
         this.benRegistrationForm.patchValue({ age: null });
       }
