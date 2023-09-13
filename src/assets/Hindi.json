@@ -456,5 +456,6 @@
   "createdDate":"Created Date",
   "reasonForNoFurtherCalls":"Reason For No FurtherCalls",
   "nextAttemptDate":"Next Attempt Date",
-  "childID":"Child ID"
+  "childID":"Child ID",
+  "isFatalQues": "Fatal Questionnaire"
 }
