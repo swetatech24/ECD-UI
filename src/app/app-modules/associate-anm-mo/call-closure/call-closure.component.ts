@@ -52,6 +52,7 @@ export class CallClosureComponent implements OnInit {
   complaints: any[] = [];
   showDetails: boolean = false;
   showCallAnswerNoDropdown: boolean = false
+  showVerifiedFields: boolean = false;
   time = new Date();
   barMinimized = true;
   ctiHandlerURL: any;
@@ -146,6 +147,7 @@ private sms_service: SmsTemplateService,
         }
         this.showDetails=false;
         this.showCallAnswerNoDropdown = false;
+        this.showVerifiedFields = false;
         this.disableIVRFeedback = true
         this.barMinimized = true;
         this.isCorrectDateAndTime = true;
@@ -345,6 +347,7 @@ private sms_service: SmsTemplateService,
             this.associateAnmMoService.fromComponent = null;
             this.associateAnmMoService.setCallClosure();
             this.showCallAnswerNoDropdown=false;
+            this.showVerifiedFields = false;
             this.showDetails = false;
             this.disableIVRFeedback = true;
             this.resetSessions();
@@ -442,7 +445,8 @@ private sms_service: SmsTemplateService,
   }
   selectNoCallAnswered(value: any) {
     if (value === 'No') {
-      this.showCallAnswerNoDropdown = true
+      this.showCallAnswerNoDropdown = true;
+      this.showVerifiedFields = false;
       this.disableIVRFeedback = true;
       for(let i=0; i<this.callTypes.length;i++){
         if(this.callTypes[i].callGroupType === "Not Answered"){
@@ -454,10 +458,13 @@ private sms_service: SmsTemplateService,
       this.callClosureForm.controls['reasonForCallNotAnsweredId'].reset();
       this.callClosureForm.controls['reasonForCallNotAnswered'].reset();
       this.callClosureForm.controls['iVRFeedbackRequired'].reset();
+      this.callClosureForm.controls['isCallVerified'].reset();
+      this.callClosureForm.controls['isWrongNumber'].reset();
     }
     else {
       this.showCallAnswerNoDropdown = false
       this.disableIVRFeedback = false;
+      this.showVerifiedFields = true;
       for(let i=0; i<this.callTypes.length;i++){
         if(this.callTypes[i].callGroupType === "Answered"){
           this.callTypeId=this.callTypes[i].callTypeID;
