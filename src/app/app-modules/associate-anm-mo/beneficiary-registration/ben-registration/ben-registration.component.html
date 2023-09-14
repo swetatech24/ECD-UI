@@ -133,7 +133,7 @@
                 class="fontStyle"
                 id="age"
                 min="12"
-                max="120"
+                max="50"
                 formControlName="age"
                 type="number"
                 allowText="number"
@@ -151,7 +151,7 @@
                 placeholder=""
                 class="fontStyleDisabled"
                 id="age"
-                max = "120"
+                max = "50"
                 formControlName="age"
                 type="number"
                 allowText="number"
@@ -540,6 +540,7 @@
                     matInput 
                     class="fontStyle"
                     [max] = "maxDate"
+                    [min] = "minimumDate"
                     [matDatepicker]="picker" 
                     [required]="enableMotherRecord ? true : false"
                     formControlName="dob">
