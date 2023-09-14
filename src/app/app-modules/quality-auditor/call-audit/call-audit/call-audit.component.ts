@@ -239,10 +239,10 @@ export class CallAuditComponent implements OnInit {
 
   getAgentByRole(){
     if(this.callAuditForm.controls['selectedRadioButton'].value === '1'){
-    if (this.qualityAuditorService.callAuditData === undefined &&  this.qualityAuditorService.callAuditData[0].selectedRadioButton === '1' ){
-    this.cycleWiseForm.controls.agentId.reset();
-    this.dateWiseForm.controls.agentId.reset();
-    }
+    // if (this.qualityAuditorService.callAuditData === undefined &&  this.qualityAuditorService.callAuditData[0].selectedRadioButton === '1' ){
+    // this.cycleWiseForm.controls.agentId.reset();
+    // this.dateWiseForm.controls.agentId.reset();
+    // }
     let roleId = this.cycleWiseForm.controls.roleId.value;
     let role = this.cycleWiseForm.controls.role.value;
     this.masterService.getAgentMasterByRoleId(roleId).subscribe((res: any) => {
@@ -257,10 +257,10 @@ export class CallAuditComponent implements OnInit {
     }
     );
   }else{
-    if (this.qualityAuditorService.callAuditData === undefined && this.qualityAuditorService.callAuditData[0].selectedRadioButton === '2'){
-      this.cycleWiseForm.controls.agentId.reset();
-      this.dateWiseForm.controls.agentId.reset();
-      }
+    // if (this.qualityAuditorService.callAuditData === undefined && this.qualityAuditorService.callAuditData[0].selectedRadioButton === '2'){
+    //   this.cycleWiseForm.controls.agentId.reset();
+    //   this.dateWiseForm.controls.agentId.reset();
+    //   }
       let roleId = this.dateWiseForm.controls.roleId.value;
       let role = this.dateWiseForm.controls.role.value;
       this.masterService.getAgentMasterByRoleId(roleId).subscribe((res: any) => {
@@ -279,12 +279,16 @@ export class CallAuditComponent implements OnInit {
 
   getRoleId(){
     if(this.callAuditForm.controls['selectedRadioButton'].value === '1'){
+      this.cycleWiseForm.controls['agentId'].reset()
+    // this.cycleWiseForm.controls['agentId'].markAsPristine();
+    
     let role = this.cycleWiseForm.controls.role.value;
     this.roles.filter((item: any) => {
       if(item.roleName == role)
       this.cycleWiseForm.controls.roleId.patchValue(item.roleId);
     });
   }else{
+    this.dateWiseForm.controls.agentId.reset();
     let role = this.dateWiseForm.controls.role.value;
     this.roles.filter((item: any) => {
       if(item.roleName == role)
