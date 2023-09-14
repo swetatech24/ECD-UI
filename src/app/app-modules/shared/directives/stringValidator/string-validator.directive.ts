@@ -51,7 +51,7 @@ export class StringValidatorDirective {
   questionnaireValidator = /^[a-zA-Z0-9.,? ]+$/;
   addressValidator = /^[a-zA-Z0-9.,/\-# ]+$/;
   itemNameSearchValidator = /^[a-zA-Z0-9% ]+$/;
-  itemNameMasterValidator = /^[a-zA-Z0-9%\-_\s]+$/;
+  itemNameMasterValidator = /^[a-zA-Z0-9%\-\.\[\]\/() ]+$/;
   answerValidator = /^[a-zA-Z0-9.,/\- ]+$/;
   usernameValidator = /^[a-zA-Z0-9]+$/;
   lastValue = null;
