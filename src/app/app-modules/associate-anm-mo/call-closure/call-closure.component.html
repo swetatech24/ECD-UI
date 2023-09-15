@@ -37,7 +37,7 @@
                         </div>
                     </div>
                     <div class="row" style="margin-bottom: 20px;">
-                        <div style="padding: 8px;" class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box m-bottom">
+                        <div style="padding: 8px; margin-left: -157px;" class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box m-bottom">
                             <label style="margin-left: 160px;" class="radio-button-styling" id="isCallAnswered"> {{currentLanguageSet?.callAnswered}}
                             </label>
                             <mat-radio-group required id="isCallAnswered" formControlName="isCallAnswered"
@@ -68,10 +68,10 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div *ngIf="showVerifiedFields" style="padding: 8px;" class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box m-bottom">
+                        <div [hidden]="showVerifiedFields == false" style="padding: 8px; margin-left: -170px;" class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box m-bottom">
                             <label style="margin-left: 175px;" class="radio-button-styling" id="isCallVerified">{{currentLanguageSet?.callVerified}}
                             </label>
-                            <mat-radio-group required id="isCallVerified" formControlName="isCallVerified"
+                            <mat-radio-group  [required]="showVerifiedFields" id="isCallVerified" formControlName="isCallVerified"
                               aria-label="isCallVerified">
                                 <mat-radio-button class="m-10" value="Yes" >{{currentLanguageSet?.yes}}</mat-radio-button>
                                 <mat-radio-button class="m-10" value="No">{{currentLanguageSet?.no}}</mat-radio-button>
@@ -87,10 +87,10 @@
                                 <mat-radio-button class="m-10" value="No">{{currentLanguageSet?.no}}</mat-radio-button>
                             </mat-radio-group>
                         </div>
-                        <div *ngIf="showVerifiedFields" style="padding: 8px;" class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box m-bottom">
+                        <div [hidden]="showVerifiedFields == false" style="padding: 8px; margin-left: -137px;" class="col-xs-12 col-sm-6 col-md-4 col-lg-4 box m-bottom">
                             <label class="radio-button-styling" id="isWrongNumber">{{currentLanguageSet?.isWrongNumber}}
                             </label>
-                            <mat-radio-group required id="isWrongNumber" formControlName="isWrongNumber"
+                            <mat-radio-group [required]="showVerifiedFields" id="isWrongNumber" formControlName="isWrongNumber"
                                 aria-label="isWrongNumber">
                                 <mat-radio-button class="m-10" value="Yes">{{currentLanguageSet?.yes}}</mat-radio-button>
                                 <mat-radio-button class="m-10" value="No">{{currentLanguageSet?.no}}</mat-radio-button>
