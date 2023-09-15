@@ -66,6 +66,7 @@ export class AgentsInnerpageComponent implements OnInit {
   isEnableComp: any = "Outbound Worklist";
   callTypes:any[]=[];
   callTypeId:any;
+  previousAgentState:any;
 
 
   constructor(
@@ -632,6 +633,11 @@ export class AgentsInnerpageComponent implements OnInit {
     this.ctiService.getAgentState(reqObj).subscribe((response:any) => {
         if (response && response.data && response.data.stateObj.stateName) {
             this.agentStatus = response.data.stateObj.stateName;
+            this.associateAnmMoService.setAgentState(this.agentStatus);
+            // if(this.previousAgentState != this.agentStatus){
+            //   this.previousAgentState = this.agentStatus
+              
+            // }
         }
 
     }, (err) => {
@@ -680,8 +686,5 @@ export class AgentsInnerpageComponent implements OnInit {
     }
 
   }
-
-
-
 
 }
