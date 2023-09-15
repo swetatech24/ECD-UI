@@ -50,10 +50,11 @@ export class EditQuestionMappingComponent implements OnInit {
   if(this.mappedQuestionListData.length>0){
     for(let i=0;i<this.mappedQuestionListData.length;i++){
       if(this.mappedQuestionListData[i].deleted ==false && this.mappedQuestionListData[i].childQuestionId !== this.selectedmappedList.childQuestionId){
-        alreadyMappedId.push(this.mappedQuestionListData[i].childQuestionId);
+        this.mappedId.push(this.mappedQuestionListData[i]);
+        // alreadyMappedId.push(this.mappedQuestionListData[i].childQuestionId);
       } 
     }
-    this.mappedId=alreadyMappedId;
+    // this.mappedId=alreadyMappedId;
     console.log(this.mappedId);
   }
   this.supervisorService.getQuestionnaires(psmId).subscribe(
@@ -68,11 +69,14 @@ export class EditQuestionMappingComponent implements OnInit {
           cQList=this.questionnaireList.filter((values:any) => values.questionnaireId != this.selectedParentId )
       
         if(this.mappedId.length>0){
-        for(let j= 0;j<this.mappedId.length;j++){
+        // for(let j= 0;j<this.mappedId.length;j++){
+          this.mappedId.forEach((item: any) => {
           cQList.forEach((value :any, index:any) => {
-            if (value. questionnaireId == this.mappedId[j]) cQList.splice(index, 1);
+            if (item.parentQuestionId == this.selectedParentId && item.childQuestionId == value.questionnaireId) 
+            cQList.splice(index, 1);
           });
-        }
+        });
+        //}
         this.childQuestionaireList=cQList;
        }
        else{
