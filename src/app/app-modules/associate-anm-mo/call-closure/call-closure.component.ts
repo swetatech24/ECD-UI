@@ -416,6 +416,7 @@ private sms_service: SmsTemplateService,
     this.associateAnmMoService.resetCloseCallOnWrapup();
     this.associateAnmMoService.isHighRiskPregnancy = false;
    this.associateAnmMoService.isHighRiskInfant = false;
+   this.associateAnmMoService.autoDialing = false;
   }
   resetForm() {
     this.callClosureForm.reset();
