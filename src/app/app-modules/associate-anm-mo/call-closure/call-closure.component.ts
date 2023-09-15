@@ -92,6 +92,8 @@ export class CallClosureComponent implements OnInit {
     iVRFeedbackRequired: false
   }
   );
+  isCallVerifiedStatus: any;
+  isWrongNumberStatus : any;
   constructor(
     private setLanguageService: SetLanguageService,
     private fb: FormBuilder,
@@ -273,10 +275,35 @@ private sms_service: SmsTemplateService,
       }
     });
   }
+  checkCallVerifiedStatus(formData: any){
+    this.isCallVerifiedStatus = undefined;
+    if(formData.isCallVerified === undefined || formData.isCallVerified === null || formData.isCallVerified === '' ){
+      this.isCallVerifiedStatus = null;
+    }
+    else{
+      if(formData.isCallVerified =="Yes"){
+        this.isCallVerifiedStatus = true;
+      }else{
+        this.isCallVerifiedStatus = false;
+      }
+    }
+   this.isWrongNumberStatus = undefined;
+   if(formData.isWrongNumber === undefined || formData.isWrongNumber === null || formData.isWrongNumber === '' ){
+    this.isWrongNumberStatus = null;
+  }
+  else{
+    if(formData.isWrongNumber =="Yes"){
+      this.isWrongNumberStatus = true;
+    }else{
+      this.isWrongNumberStatus = false;
+    }
+  }
+  }
   
   
   submitCallClosure(formData: any) {
     console.log(formData);
+   this.checkCallVerifiedStatus(formData);
     let reqObj: any = {};
     reqObj = {
       benCallId : this.associateAnmMoService.callDetailId,
@@ -295,12 +322,12 @@ private sms_service: SmsTemplateService,
       isFurtherCallRequired: (formData.isFurtherCallRequired=="Yes")?true:false,
       reasonForNoFurtherCallsId: formData.reasonForNoFurtherCallsId,
       reasonForNoFurtherCalls: formData.reasonForNoFurtherCalls,
-      isCallVerified: (formData.isCallverified === "Yes") ? true : (formData.isCallverified === undefined) ? null : false,
+      isCallVerified: this.isCallVerifiedStatus,
       isCallAnswered: (formData.isCallAnswered=="Yes")?true:false,
       reasonForCallNotAnsweredId: formData.reasonForCallNotAnsweredId,
       reasonForCallNotAnswered: formData.reasonForCallNotAnswered, 
       isCallDisconnected: (formData.isCallDisconnected=="Yes")?true:false,
-      isWrongNumber: (formData.isWrongNumber === "Yes") ? true : (formData.isWrongNumber === undefined) ? null : false,
+      isWrongNumber: this.isWrongNumberStatus,
       typeOfComplaint: (formData.typeOfComplaint !== null && formData.typeOfComplaint !== undefined && formData.typeOfComplaint !== "") ? formData.typeOfComplaint : null,
       complaintRemarks: (formData.complaintRemarks !== null && formData.complaintRemarks !== undefined && formData.complaintRemarks !== "") ? formData.complaintRemarks : null,
       nextAttemptDate: (formData.nextAttemptDate !== null && formData.nextAttemptDate !== undefined && formData.nextAttemptDate !== "") ? formData.nextAttemptDate : null,
