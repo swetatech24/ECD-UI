@@ -112,9 +112,9 @@ export class AgentsInnerpageComponent implements OnInit {
     this.associateAnmMoService.openCompFlag$.subscribe((responseComp) => {
       if (responseComp !== null && (responseComp === "Call Closure" || responseComp === "Outbound Worklist" || responseComp === "Beneficiary Call History" || responseComp === "Beneficiary Registration" || responseComp === "ECD Questionnaire" || responseComp === "Call Closed")) {
         if(responseComp === "Call Closed") {
-          if (this.timerSubscription != undefined) {
-            this.timerSubscription.unsubscribe();
-          }
+          // if (this.timerSubscription != undefined) {
+          //   this.timerSubscription.unsubscribe();
+          // }
           this.unsubscribeWrapupTime();
           if (this.callTimerSubscription != undefined) {
             this.callTimerSubscription.unsubscribe();

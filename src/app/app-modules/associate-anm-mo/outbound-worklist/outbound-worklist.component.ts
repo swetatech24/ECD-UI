@@ -78,26 +78,32 @@ export class OutboundWorklistComponent implements OnInit {
     this.getSelectedLanguage();
   }
   ngOnInit(): void {
-    
+   
     this.getSelectedLanguage();
     this.isChecked = false;
     this.getAutoPreviewDialing();
     this.associateAnmMoService.agentCurrentStatusData$.subscribe((response)=>{
+      console.log("Observable invoke", response)
       if( response != undefined){
         this.agentStatus = response;
-          if((this.agentStatus === "FREE" || this.agentStatus === "READY")  )  
+          if((this.agentStatus === "FREE" || this.agentStatus === "READY")  ) {
+          console.log("Agent Status",this.agentStatus)
+          console.log("auto Preview Dial",this.isAutoPreviewDial);
+          console.log("auto Preview Dial from service",this.associateAnmMoService.isStartAutoPreviewDial);
+          console.log("auto dialing already started",this.associateAnmMoService.autoDialing)
           if(this.isAutoPreviewDial === true && this.associateAnmMoService.isStartAutoPreviewDial === true && this.dataSource.data.length > 0 && this.associateAnmMoService.autoDialing == false) {
           this.isChecked = true;
           let previewTime = this.previewWindowTime * 1000;
           
         this.autoPreviewTimeSub = timer(previewTime).pipe( 
           map(() => { 
+            console.log("Method called from Agent Inner page Observable")
           this.StartAutoPreviewDialing(true);
             }) 
           ).subscribe();
          
         }
-        
+      }
       }
          })
     // this.associateAnmMoService.resetAgentState();
@@ -185,6 +191,7 @@ export class OutboundWorklistComponent implements OnInit {
             
           this.autoPreviewTimeSub = timer(previewTime).pipe( 
             map(() => {   
+              console.log("Method called from Outbound worklist");
             this.StartAutoPreviewDialing(true);
               }) 
             ).subscribe();
@@ -466,6 +473,7 @@ export class OutboundWorklistComponent implements OnInit {
 
   StartAutoPreviewDialing(isChecked:any) {
     this.associateAnmMoService.autoDialing = true;
+    console.log("Auto dialing started")
     if (this.autoPreviewTimeSub) {
       this.autoPreviewTimeSub.unsubscribe();
     }
@@ -483,21 +491,20 @@ export class OutboundWorklistComponent implements OnInit {
   } 
 
   getAgentState(isMother:any) {
+    console.log("inside agent state of outbound worklist component")
     let reqObj = {"agent_id" : this.loginService.agentId};
     this.ctiService.getAgentState(reqObj).subscribe((response:any) => {
-        if (response && response.data && response.data.stateObj.stateName) {
-           
+      console.log("Final status of agent",response)
+        if (response && response.data && response.data.stateObj.stateName) { 
             if (
               response.data.stateObj.stateName.toUpperCase() === "FREE" ||
               response.data.stateObj.stateName.toUpperCase() === "READY"
             ) {
               this.startAutoDialCall(isMother);
             } else {
-              this.confirmationService.openDialog(this.currentLanguageSet.agentIsNotInFreeOrReadState, 'error');
-              this.reset();
-            }
-          
+              this.reset();   
         }
+      }
         else {
           this.reset();
         }
@@ -534,6 +541,7 @@ startAutoDialCall(isMother:any) {
 
 
 reset() {
+  console.log("Inside Reset")
 this.isChecked = false;
 this.associateAnmMoService.autoDialing =false;
 // this.associateAnmMoService.isStartAutoPreviewDial = false;
