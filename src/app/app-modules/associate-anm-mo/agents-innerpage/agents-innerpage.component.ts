@@ -206,6 +206,8 @@ export class AgentsInnerpageComponent implements OnInit {
   }
 
   ngOnDestroy() {
+    this.associateAnmMoService.isStartAutoPreviewDial = false;
+    this.associateAnmMoService.autoDialing = false;
     console.log("removing message listener");
     removeEventListener("message", this.toRemove, false);
     if (this.timerSubscription != undefined) {
