@@ -4,7 +4,7 @@
     <h2 class="inner fontStyleHeading">{{currentLanguageSet?.beneficiaryRegistration}}</h2>
     <button 
     mat-raised-button
-      *ngIf="selectedRole === 'MO' || selectedRole === 'ANM'"
+      *ngIf="selectedRole === 'MO' || selectedRole === 'ANM' || (selectedRole === 'Associate' && enableUpdateButton)"
       style="width: 200px; margin-top: -50px; float: right;" 
       class="buttonColor quesButton fontStyleButton"
       (click)="openEcdQuestionnaire()">
