@@ -87,7 +87,7 @@ export class OutboundWorklistComponent implements OnInit {
       if( response != undefined){
         this.agentStatus = response;
           if((this.agentStatus === "FREE" || this.agentStatus === "READY")  ) {
-          if(this.isAutoPreviewDial === true && this.associateAnmMoService.isStartAutoPreviewDial === true && this.dataSource.data.length > 0 && this.associateAnmMoService.autoDialing == false) {
+          if(this.isAutoPreviewDial === true && this.associateAnmMoService.isStartAutoPreviewDial === true && this.dataSource.data.length > 0 && this.associateAnmMoService.autoDialing == false && sessionStorage.getItem("onCall") === "false") {
           this.isChecked = true;
           let previewTime = this.previewWindowTime * 1000;
           
@@ -179,7 +179,7 @@ export class OutboundWorklistComponent implements OnInit {
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort=this.sort;
 
-          if(this.isAutoPreviewDial === true && this.associateAnmMoService.isStartAutoPreviewDial === true && this.dataSource.data.length > 0 && this.associateAnmMoService.autoDialing === false) {
+          if(this.isAutoPreviewDial === true && this.associateAnmMoService.isStartAutoPreviewDial === true && this.dataSource.data.length > 0 && this.associateAnmMoService.autoDialing === false && sessionStorage.getItem("onCall") === "false") {
             
             this.isChecked = true;
             let previewTime = this.previewWindowTime * 1000;
@@ -230,7 +230,7 @@ export class OutboundWorklistComponent implements OnInit {
           ];
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort=this.sort;
-          if(this.isAutoPreviewDial === true && this.associateAnmMoService.isStartAutoPreviewDial === true && this.dataSource.data.length > 0 && this.associateAnmMoService.autoDialing === false) {
+          if(this.isAutoPreviewDial === true && this.associateAnmMoService.isStartAutoPreviewDial === true && this.dataSource.data.length > 0 && this.associateAnmMoService.autoDialing === false && sessionStorage.getItem("onCall") === "false") {
             this.isChecked = true;
             let previewTime = this.previewWindowTime * 1000;
             
