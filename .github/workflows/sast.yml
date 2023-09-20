@@ -4,14 +4,14 @@ on:
   push:
     branches: [ "develop"]
     paths-ignore:
-     - 'target/**'
-     - 'dist/**'
+     - '!target/**'
+     - '!dist/**'
      
   pull_request:
      branches: [ "develop" ]
      paths-ignore:
-     - target/**
-     - dist/**
+     - '!target/**'
+     - '!dist/**'
 jobs:
   analyze:
     name: Analyze
