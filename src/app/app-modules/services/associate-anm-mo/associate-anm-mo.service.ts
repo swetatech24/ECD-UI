@@ -36,7 +36,7 @@ export class AssociateAnmMoService {
   selectedBenDetails: any;
   isMother:boolean = false;
   callDetailId: any = null;
-  isStartAutoPreviewDial:any = false;
+  isStartAutoPreviewDial:boolean = false;
   isHighRiskPregnancy: boolean = false;
   isHighRiskInfant: boolean = false;
   autoDialing:boolean = false;
