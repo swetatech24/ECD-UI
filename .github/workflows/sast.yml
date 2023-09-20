@@ -50,12 +50,13 @@ jobs:
         yarn add node-sass --force
         yarn --force
         yarn build
-
+    
     - name: Skip CodeQL for dist and target directories
-      run: echo "::set-env name=CODEQL_ACTION_ANALYZE_PATHS::$(find . -type f -not -path './dist/*' -not -path './target/*')"
-      shell: bash    
-       
+      run: echo "::set-output name=CODEQL_ACTION_ANALYZE_PATHS::$(find . -type f -not -path './dist/*' -not -path './target/*')"
+      shell: bash
+    
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
       with:
         category: "/language:${{matrix.language}}"
+        paths: ${{ steps.skip_codeql.outputs.CODEQL_ACTION_ANALYZE_PATHS }}
