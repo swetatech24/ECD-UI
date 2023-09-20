@@ -57,7 +57,6 @@ export class OutboundWorklistComponent implements OnInit {
   mappedOutBoundWorkList:any[]=[];
   displayedColumns: string[] = [];
   isChecked = false;
-  autoDialing:boolean=false
   isAutoPreviewDial: boolean = false;
   previewWindowTime: any;
   agentStatus:any;
@@ -87,7 +86,7 @@ export class OutboundWorklistComponent implements OnInit {
       if( response != undefined){
         this.agentStatus = response;
           if((this.agentStatus === "FREE" || this.agentStatus === "READY")  ) {
-          if(this.isAutoPreviewDial === true && this.associateAnmMoService.isStartAutoPreviewDial === true && this.dataSource.data.length > 0 && this.associateAnmMoService.autoDialing == false && sessionStorage.getItem("onCall") === "false" && this.previewWindowTime !== null && this.previewWindowTime !== undefined) {
+          if(this.isAutoPreviewDial && this.associateAnmMoService.isStartAutoPreviewDial  && this.dataSource.data.length > 0 && !this.associateAnmMoService.autoDialing  && sessionStorage.getItem("onCall") === "false" && this.previewWindowTime !== null && this.previewWindowTime !== undefined) {
           this.isChecked = true;
           let previewTime = this.previewWindowTime * 1000;
           
@@ -178,20 +177,6 @@ export class OutboundWorklistComponent implements OnInit {
           ];
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort=this.sort;
-
-          // if(this.isAutoPreviewDial === true && this.associateAnmMoService.isStartAutoPreviewDial === true && this.dataSource.data.length > 0 && this.associateAnmMoService.autoDialing === false && sessionStorage.getItem("onCall") === "false" && this.previewWindowTime !== null && this.previewWindowTime !== undefined) {
-            
-          //   this.isChecked = true;
-          //   let previewTime = this.previewWindowTime * 1000;
-            
-          // this.autoPreviewTimeSub = timer(previewTime).pipe( 
-          //   map(() => {   
-          //   this.StartAutoPreviewDialing(true);
-          //     }) 
-          //   ).subscribe();
-           
-          // }
-      
         } else {
           this.confirmationService.openDialog(response.errorMessage, 'error');
         }
@@ -229,19 +214,7 @@ export class OutboundWorklistComponent implements OnInit {
             'action'
           ];
           this.dataSource.paginator = this.paginator;
-          this.dataSource.sort=this.sort;
-          // if(this.isAutoPreviewDial === true && this.associateAnmMoService.isStartAutoPreviewDial === true && this.dataSource.data.length > 0 && this.associateAnmMoService.autoDialing === false && sessionStorage.getItem("onCall") === "false" && this.previewWindowTime !== null && this.previewWindowTime !== undefined) {
-          //   this.isChecked = true;
-          //   let previewTime = this.previewWindowTime * 1000;
-            
-          // this.autoPreviewTimeSub = timer(previewTime).pipe( 
-          //   map(() => { 
-          //   this.StartAutoPreviewDialing(true);
-          //     }) 
-          //   ).subscribe();
-           
-          // }
-          
+          this.dataSource.sort=this.sort;     
         } 
         else {
           this.confirmationService.openDialog(response.errorMessage, 'error');
@@ -535,8 +508,6 @@ startAutoDialCall(isMother:any) {
 reset() {
 this.isChecked = false;
 this.associateAnmMoService.autoDialing =false;
-// this.associateAnmMoService.isStartAutoPreviewDial = false;
-
 }
 
 
