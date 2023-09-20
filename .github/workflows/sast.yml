@@ -3,17 +3,9 @@ name: "CodeQL"
 on:
   push:
     branches: [ "develop"]
-    paths:
-     - '**'
-     - '!target/**'
-     - '!dist/**'
-     
   pull_request:
-     branches: [ "develop" ]
-     paths:
-     - '**'
-     - '!target/**'
-     - '!dist/**'
+    branches: [ "develop" ]
+    
 jobs:
   analyze:
     name: Analyze
@@ -58,6 +50,10 @@ jobs:
         yarn add node-sass --force
         yarn --force
         yarn build
+
+    - name: Skip CodeQL for dist and target directories
+      run: echo "::set-env name=CODEQL_ACTION_ANALYZE_PATHS::$(find . -type f -not -path './dist/*' -not -path './target/*')"
+      shell: bash    
        
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
