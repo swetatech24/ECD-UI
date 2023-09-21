@@ -507,11 +507,14 @@ export class EcdQuestionnaireComponent implements OnInit {
   }
 
     isQuestionEnabled(question: any) {
-        if (question.parentQuestionId !== null && question.parentQuestionId != undefined && 
-            question.parentAnswer !== null && question.parentAnswer != undefined) {
-            return false;
+      let arr : any= [];
+        if (question.parentQuestionId !== undefined && question.parentQuestionId != null && question.parentQuestionId.length > 0
+            && question.parentAnswer !== undefined && question.parentAnswer !== null && question.parentAnswer.length > 0 ) {
+            return arr;
+        } else {
+          arr.push("Parent Ques")
+        return arr;
         }
-        return true;
     }
 
     processFilteredQuestionnaires(selectedAnsweredQues: any) {
@@ -520,27 +523,57 @@ export class EcdQuestionnaireComponent implements OnInit {
         section.questionnaires.forEach((questionnaire: any) => {
           if (selectedAnsweredQues.answerType != null && selectedAnsweredQues.answerType != undefined &&
             (selectedAnsweredQues.answerType.toLowerCase() === "radio" || selectedAnsweredQues.answerType.toLowerCase() === "dropdown")) {
-            if(questionnaire.parentQuestionId === selectedAnsweredQues.questionid &&
-              selectedAnsweredQues.answer != null && questionnaire.parentAnswer === selectedAnsweredQues.answer) {
-              questionnaire.enabledQues = true;
+            if(questionnaire.parentQuestionId != null && questionnaire.parentQuestionId.includes(selectedAnsweredQues.questionid) &&
+              selectedAnsweredQues.answer != null){ //&& questionnaire.parentAnswer.includes(selectedAnsweredQues.answer)) {
+                questionnaire.parentAnswer.forEach((answer: any) => {
+                  if(answer.parentQuesId == selectedAnsweredQues.questionid){
+                    if(answer.parentAnswerList.includes(selectedAnsweredQues.answer)){
+                      if(!questionnaire.enabledQues.includes(answer.parentQuesId) ){
+                    questionnaire.enabledQues.push(answer.parentQuesId);
+                      }
+                    } else {
+                      const indexToRemove = questionnaire.enabledQues.indexOf(answer.parentQuesId);
+                      if (indexToRemove !== -1) { 
+                        questionnaire.enabledQues.splice(indexToRemove, 1);
+                        questionnaire.answer = null; 
+                      }                    
+                    }
+                }
+                })
+              
             } else if((questionnaire.parentQuestionId === selectedAnsweredQues.questionid) &&
-                        (selectedAnsweredQues.answer == null || questionnaire.parentAnswer !== selectedAnsweredQues.answer)) {
+                        (selectedAnsweredQues.answer == null || !questionnaire.parentAnswer.includes(selectedAnsweredQues.answer) )) {
               questionnaire.enabledQues = false;
               questionnaire.answer = null;
               this.processFilteredQuestionnaires(questionnaire);
             }
           } else if (selectedAnsweredQues.answerType != null && selectedAnsweredQues.answerType != undefined &&
             selectedAnsweredQues.answerType.toLowerCase() === "multiple") {
-              if(questionnaire.parentQuestionId === selectedAnsweredQues.questionid &&
-                selectedAnsweredQues.answer != null && selectedAnsweredQues.answer.includes(questionnaire.parentAnswer)) {
-                questionnaire.enabledQues = true;
-              } else if((questionnaire.parentQuestionId === selectedAnsweredQues.questionid) && 
-                        (selectedAnsweredQues.answer == null || !selectedAnsweredQues.answer.includes(questionnaire.parentAnswer))) {
+              if(questionnaire.parentQuestionId != null && questionnaire.parentQuestionId.includes(selectedAnsweredQues.questionid) &&
+                selectedAnsweredQues.answer != null){ // && selectedAnsweredQues.answer.includes(questionnaire.parentAnswer)) {
+                  questionnaire.parentAnswer.forEach((answer: any) => {
+                    if(answer.parentQuesId == selectedAnsweredQues.questionid) 
+                    if(answer.parentAnswerList.filter((item:any) => item.includes(selectedAnsweredQues.answer))){
+                      console.log("Condition passed: answer.parentAnswerList includes selectedAnsweredQues.answer");
+                      if(!questionnaire.enabledQues.includes(answer.parentQuesId) ){
+                        questionnaire.enabledQues.push(answer.parentQuesId);
+                          }
+                        } else {
+                          const indexToRemove = questionnaire.enabledQues.indexOf(answer.parentQuesId);
+                          if (indexToRemove !== -1) { 
+                            questionnaire.enabledQues.splice(indexToRemove, 1);
+                            questionnaire.answer = null;
+                          }                    
+                        }
+                  });
+              } 
+            }else if((questionnaire.parentQuestionId === selectedAnsweredQues.questionid) && 
+                        (selectedAnsweredQues.answer == null)){ //|| !selectedAnsweredQues.answer.includes(questionnaire.parentAnswer))) {
                           questionnaire.enabledQues = false;
                           questionnaire.answer = null;
                           this.processFilteredQuestionnaires(questionnaire);
               }
-          }
+          //}
         });
       });
     }

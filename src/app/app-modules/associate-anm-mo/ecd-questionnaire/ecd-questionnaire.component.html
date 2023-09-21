@@ -575,13 +575,13 @@
               <ng-template matStepLabel> {{section.sectionName}} </ng-template>
               <mat-card class="stepperCard fontStyle">
                 <mat-card-content *ngFor="let ques of section.questionnaires" class="fontStyle">
-                  <div *ngIf="ques?.questionType?.toLowerCase() === 'information' || ques?.questionType?.toLowerCase() === 'info'">
+                  <div *ngIf="(ques?.questionType?.toLowerCase() === 'information' || ques?.questionType?.toLowerCase() === 'info') && ques?.enabledQues.length >0">
                     <li> {{ques.question}} </li>
                   </div>
-                  <div *ngIf="ques?.questionType?.toLowerCase() === 'label'">
+                  <div *ngIf="ques?.questionType?.toLowerCase() === 'label' && ques?.enabledQues.length > 0">
                     <a class="textColor"> {{ques.question}} </a>
                   </div>
-                  <div *ngIf="ques?.questionType?.toLowerCase() === 'question' && ques?.enabledQues != false">
+                  <div *ngIf="ques?.questionType?.toLowerCase() === 'question' && ques?.enabledQues.length > 0">
                     <li class="quesStyle"><strong> {{ques.question}} </strong>
 
                     <!-- Fields to check the question type starts here-->
