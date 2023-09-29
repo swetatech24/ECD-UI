@@ -119,10 +119,10 @@ export class LoginComponent implements OnInit {
 
 
 
-  hashPassword(password: string): string {
-    const saltRounds = 16; // Increase the number of salt rounds for better security
+  async hashPassword(password: string): Promise<string> {
+    const saltRounds = 12; // Adjust the number of rounds as needed
     const salt = bcrypt.genSaltSync(saltRounds);
-    const hash = bcrypt.hashSync(password, salt);
+    const hash = await bcrypt.hash(password, salt);
     return hash;
   }
 
@@ -173,45 +173,49 @@ export class LoginComponent implements OnInit {
           doLogout: false,
         };
 
-    this.loginService.validateLogin(reqObj).subscribe(
-      (res: any) => {
-        if (
-          res.statusCode === 200 &&
-          res.data !== null &&
-          res.data.previlegeObj !== undefined &&
-          res.data.previlegeObj !== null
-        ) {
-          this.getServiceAuthenticationDetails(res.data);
-        } else if (res.statusCode === 5002) {
-          if (
-            res.errorMessage ===
-            'You are already logged in,please confirm to logout from other device and login again'
-          ) {
-            this.userLogOutPreviousSession(res);
-          } else {
-            sessionStorage.clear();
-            this.router.navigate(['/login']);
-            this.confirmationService.openDialog(res.errorMessage, 'error');
+        this.loginService.validateLogin(reqObj).subscribe(
+          (res: any) => {
+            if (
+              res.statusCode === 200 &&
+              res.data !== null &&
+              res.data.previlegeObj !== undefined &&
+              res.data.previlegeObj !== null
+            ) {
+              this.getServiceAuthenticationDetails(res.data);
+            } else if (res.statusCode === 5002) {
+              if (
+                res.errorMessage ===
+                'You are already logged in, please confirm to logout from another device and login again'
+              ) {
+                this.userLogOutPreviousSession(res);
+              } else {
+                sessionStorage.clear();
+                this.router.navigate(['/login']);
+                this.confirmationService.openDialog(res.errorMessage, 'error');
+              }
+            } else {
+              this.confirmationService.openDialog(res.errorMessage, 'error');
+            }
+          },
+          (err: any) => {
+            if (err && err.error)
+              this.confirmationService.openDialog(err.error, 'error');
+            else
+              this.confirmationService.openDialog(
+                err.title + err.detail,
+                'error'
+              );
           }
-        } else {
-          this.confirmationService.openDialog(res.errorMessage, 'error');
-        }
-      },
-      (err: any) => {
-        if(err && err.error)
-        this.confirmationService.openDialog(err.error, 'error');
-        else
-        this.confirmationService.openDialog(err.title + err.detail, 'error')
-        }
-      );
-    } catch (error) {
-      console.error('Error hashing the password:', error);
+        );
+      } catch (error) {
+        console.error('Error hashing the password:', error);
+      }
+    } else {
+      // Handle the case where the password control is null or empty
+      console.error('Password is null or empty');
     }
-  } else {
-    // Handle the case where the password control is null or empty
-    console.error('Password is null or empty');
   }
-}
+
     /**
    *
    * @param loginResp
@@ -398,5 +402,3 @@ export class LoginComponent implements OnInit {
     this.router.navigate(['/forgot-password']);
   }
 }
-
-
