@@ -119,8 +119,8 @@ export class LoginComponent implements OnInit {
 
 
 
-  async hashPassword(password: string): Promise<string> {
-    const saltRounds = 12; // Adjust the number of rounds as needed
+ async hashPassword(password: string): Promise<string> {
+    const saltRounds = 15; // Adjust the number of rounds as needed
     const salt = bcrypt.genSaltSync(saltRounds);
     const hash = await bcrypt.hash(password, salt);
     return hash;
