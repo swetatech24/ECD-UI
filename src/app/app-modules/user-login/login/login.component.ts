@@ -32,10 +32,8 @@ import { CtiService } from '../../services/cti/cti.service';
 import { DOCUMENT } from '@angular/common';
 import * as moment from 'moment';
 import * as CryptoJS from 'crypto-js';
+import * as bcrypt from 'bcryptjs';
 
-/**
- * DE40034072 - 12-01-2022
- */
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -121,15 +119,22 @@ export class LoginComponent implements OnInit {
 
 
 
-  generateKey(salt:any, passPhrase:any) {
-    return CryptoJS.PBKDF2(passPhrase, CryptoJS.enc.Hex.parse(salt), {
-      hasher: CryptoJS.algo.SHA512,
-      keySize: this.keySize / 32,
-      iterations: this._iterationCount
-    })
+  hashPassword(password: string): string {
+    const saltRounds = 16; // Increase the number of salt rounds for better security
+    const salt = bcrypt.genSaltSync(saltRounds);
+    const hash = bcrypt.hashSync(password, salt);
+    return hash;
   }
 
-
+  generateKey(salt: string, passPhrase: string): string {
+    const key = CryptoJS.PBKDF2(passPhrase, salt, {
+      keySize: this.keySize / 32, 
+      iterations: this.iterationCount,
+      hasher: CryptoJS.algo.SHA512, 
+    });
+    
+    return key.toString(CryptoJS.enc.Hex);
+  }
 
   encryptWithIvSalt(salt:any, iv:any, passPhrase:any, plainText:any) {
     let key = this.generateKey(salt, passPhrase);
@@ -152,16 +157,22 @@ export class LoginComponent implements OnInit {
     password: [''],
   });
 
+   
+
   /**
    * Calling user authentication API
    */
-  public onSubmit(): void {
-   let encryptedPwd = this.encrypt(this.Key_IV, this.loginForm.controls.password.value)
-    let reqObj = {
-      userName: this.loginForm.controls.userName.value,
-      password: encryptedPwd,
-      doLogout: false
-    };
+  public async onSubmit(): Promise<void> {
+    const passwordControl = this.loginForm.controls.password;
+    if (passwordControl && passwordControl.value) {
+      try {
+        const hashedPassword = await this.hashPassword(passwordControl.value);
+        const reqObj = {
+          userName: this.loginForm.controls.userName.value,
+          password: hashedPassword,
+          doLogout: false,
+        };
+
     this.loginService.validateLogin(reqObj).subscribe(
       (res: any) => {
         if (
@@ -191,10 +202,17 @@ export class LoginComponent implements OnInit {
         this.confirmationService.openDialog(err.error, 'error');
         else
         this.confirmationService.openDialog(err.title + err.detail, 'error')
-        });
+        }
+      );
+    } catch (error) {
+      console.error('Error hashing the password:', error);
+    }
+  } else {
+    // Handle the case where the password control is null or empty
+    console.error('Password is null or empty');
   }
-
-  /**
+}
+    /**
    *
    * @param loginResp
    * Calling API to logout user from previous session
@@ -380,3 +398,5 @@ export class LoginComponent implements OnInit {
     this.router.navigate(['/forgot-password']);
   }
 }
+
+
