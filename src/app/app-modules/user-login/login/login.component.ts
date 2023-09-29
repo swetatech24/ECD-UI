@@ -32,8 +32,10 @@ import { CtiService } from '../../services/cti/cti.service';
 import { DOCUMENT } from '@angular/common';
 import * as moment from 'moment';
 import * as CryptoJS from 'crypto-js';
-import * as bcrypt from 'bcryptjs';
 
+/**
+ * DE40034072 - 12-01-2022
+ */
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -70,7 +72,7 @@ export class LoginComponent implements OnInit {
   ) {
     this._keySize = 256;
       this._ivSize = 128;
-      this._iterationCount = 1989;
+      this._iterationCount = 10000;
 
   }
 
@@ -119,34 +121,30 @@ export class LoginComponent implements OnInit {
 
 
 
- async hashPassword(password: string): Promise<string> {
-    const saltRounds = 15; // Adjust the number of rounds as needed
-    const salt = bcrypt.genSaltSync(saltRounds);
-    const hash = await bcrypt.hash(password, salt);
-    return hash;
+  generateKey(salt:any, passPhrase:any) {
+    return CryptoJS.PBKDF2(passPhrase, CryptoJS.enc.Hex.parse(salt), {
+      hasher: CryptoJS.algo.SHA512,
+      keySize: this.keySize / 32,
+      iterations: this._iterationCount
+    })
   }
 
-  generateKey(salt: string, passPhrase: string): string {
-    const key = CryptoJS.PBKDF2(passPhrase, salt, {
-      keySize: this.keySize / 32, 
-      iterations: this.iterationCount,
-      hasher: CryptoJS.algo.SHA512, 
-    });
-    
-    return key.toString(CryptoJS.enc.Hex);
-  }
+
 
   encryptWithIvSalt(salt:any, iv:any, passPhrase:any, plainText:any) {
-    let key = this.generateKey(salt, passPhrase);
+    let key = this.generateKey(salt, passPhrase); // Generate the key
     let encrypted = CryptoJS.AES.encrypt(plainText, key, {
-      iv: CryptoJS.enc.Hex.parse(iv)
+    iv: CryptoJS.enc.Hex.parse(iv),
+    mode: CryptoJS.mode.CFB,
+    padding: CryptoJS.pad.Pkcs7,
     });
+   
     return encrypted.ciphertext.toString(CryptoJS.enc.Base64);
   }
 
   encrypt(passPhrase:any, plainText:any) {
     let iv = CryptoJS.lib.WordArray.random(this._ivSize / 8).toString(CryptoJS.enc.Hex);
-    let salt = CryptoJS.lib.WordArray.random(this.keySize / 8).toString(CryptoJS.enc.Hex);
+    let salt = CryptoJS.lib.WordArray.random(16).toString(CryptoJS.enc.Hex);
     let ciphertext = this.encryptWithIvSalt(salt, iv, passPhrase, plainText);
     return salt + iv + ciphertext;
   }
@@ -157,66 +155,49 @@ export class LoginComponent implements OnInit {
     password: [''],
   });
 
-   
-
   /**
    * Calling user authentication API
    */
-  public async onSubmit(): Promise<void> {
-    const passwordControl = this.loginForm.controls.password;
-    if (passwordControl && passwordControl.value) {
-      try {
-        const hashedPassword = await this.hashPassword(passwordControl.value);
-        const reqObj = {
-          userName: this.loginForm.controls.userName.value,
-          password: hashedPassword,
-          doLogout: false,
-        };
-
-        this.loginService.validateLogin(reqObj).subscribe(
-          (res: any) => {
-            if (
-              res.statusCode === 200 &&
-              res.data !== null &&
-              res.data.previlegeObj !== undefined &&
-              res.data.previlegeObj !== null
-            ) {
-              this.getServiceAuthenticationDetails(res.data);
-            } else if (res.statusCode === 5002) {
-              if (
-                res.errorMessage ===
-                'You are already logged in, please confirm to logout from another device and login again'
-              ) {
-                this.userLogOutPreviousSession(res);
-              } else {
-                sessionStorage.clear();
-                this.router.navigate(['/login']);
-                this.confirmationService.openDialog(res.errorMessage, 'error');
-              }
-            } else {
-              this.confirmationService.openDialog(res.errorMessage, 'error');
-            }
-          },
-          (err: any) => {
-            if (err && err.error)
-              this.confirmationService.openDialog(err.error, 'error');
-            else
-              this.confirmationService.openDialog(
-                err.title + err.detail,
-                'error'
-              );
+  public onSubmit(): void {
+   let encryptedPwd = this.encrypt(this.Key_IV, this.loginForm.controls.password.value)
+    let reqObj = {
+      userName: this.loginForm.controls.userName.value,
+      password: encryptedPwd,
+      doLogout: false
+    };
+    this.loginService.validateLogin(reqObj).subscribe(
+      (res: any) => {
+        if (
+          res.statusCode === 200 &&
+          res.data !== null &&
+          res.data.previlegeObj !== undefined &&
+          res.data.previlegeObj !== null
+        ) {
+          this.getServiceAuthenticationDetails(res.data);
+        } else if (res.statusCode === 5002) {
+          if (
+            res.errorMessage ===
+            'You are already logged in,please confirm to logout from other device and login again'
+          ) {
+            this.userLogOutPreviousSession(res);
+          } else {
+            sessionStorage.clear();
+            this.router.navigate(['/login']);
+            this.confirmationService.openDialog(res.errorMessage, 'error');
           }
-        );
-      } catch (error) {
-        console.error('Error hashing the password:', error);
-      }
-    } else {
-      // Handle the case where the password control is null or empty
-      console.error('Password is null or empty');
-    }
+        } else {
+          this.confirmationService.openDialog(res.errorMessage, 'error');
+        }
+      },
+      (err: any) => {
+        if(err && err.error)
+        this.confirmationService.openDialog(err.error, 'error');
+        else
+        this.confirmationService.openDialog(err.title + err.detail, 'error')
+        });
   }
 
-    /**
+  /**
    *
    * @param loginResp
    * Calling API to logout user from previous session
